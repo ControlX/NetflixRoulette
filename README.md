@@ -1,4 +1,9 @@
 # reactjs_with_epam
+
+---TASKS OF EACH SESSIONS WILL BE UPDATED IN THIS README---
+
+//==== Session 2: Webpack ====//
+
 General configuration and environment setup.
 
 Created: 
