@@ -1,9 +1,10 @@
 # reactjs_with_epam
 
----TASKS OF EACH SESSIONS WILL BE UPDATED IN THIS README---
+--- Sessions and their contents will be updated in this ReadMe ---
 
-//==== Session 2: Webpack ====//
 
+
+//======== Session 2: Webpack ========//
 General configuration and environment setup.
 
 Created: 
