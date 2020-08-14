@@ -4,7 +4,7 @@
 
 
 
-//======== Session 2: Webpack ========//
+==>> Session 2: Webpack
 
 General configuration and environment setup.
 
