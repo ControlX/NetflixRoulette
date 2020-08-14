@@ -1,4 +1,4 @@
-# reactjs_2_webpack
+# reactjs_with_epam
 General configuration and environment setup.
 
 Created: 
