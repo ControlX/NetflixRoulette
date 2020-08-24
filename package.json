@@ -4,8 +4,8 @@
   "description": "webpack and configuration",
   "main": "index.js",
   "scripts": {
-    "start:dev": "NODE_ENV=development webpack-dev-server --mode development -p",
-    "start:prod": "NODE_ENV=production webpack-dev-server --mode production --open --watch",
+    "start:dev": "NODE_ENV=development webpack-dev-server --open",
+    "start:prod": "NODE_ENV=production webpack-dev-server --open",
     "test": "jest",
     "build:dev": "NODE_ENV=development webpack --mode development",
     "build:prod": "NODE_ENV=production webpack --mode production"
@@ -24,16 +24,16 @@
   },
   "homepage": "https://github.com/ControlX/reactjs_2_webpack#readme",
   "dependencies": {
-    "html-webpack-plugin": "^4.3.0",
-    "jest": "^26.3.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.1",
     "react-router": "^5.2.0",
-    "redux": "^4.0.5",
-    "webpack-dev-server": "^3.11.0"
+    "redux": "^4.0.5"
   },
   "devDependencies": {
+    "html-webpack-plugin": "^4.3.0",
+    "jest": "^26.3.0",
+    "webpack-dev-server": "^3.11.0",
     "@babel/core": "^7.11.1",
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-react": "^7.10.4",
