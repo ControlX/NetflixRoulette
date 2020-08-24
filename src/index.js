@@ -1,14 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-//Why process.env.NODE_ENV always resolve to production, though I'm running on development.
-//If I console.log in webpack.config.js it shows correct output...
-console.log("==Logging environment variable: ", process.env.NODE_ENV);
+import AppComponent from './Components/Component1/AppComponent'
+import './Components/Component1/styles.css'
 
 const App = () => (
-    <div>
-        <h1>Webpack and other configurations in ReactJS.</h1>
-        <h2>Application is running on the environment: {process.env.NODE_ENV}</h2>
+    <div className='main-div-properties'>
+        {<AppComponent />}
     </div>
 )
 
