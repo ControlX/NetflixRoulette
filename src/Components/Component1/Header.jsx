@@ -2,6 +2,6 @@ import React from 'react'
 
 export default function Header(){
     return (
-        <h1>Movies App</h1>
+        <p className='parent-header-primary-font-properties'><strong>netflix</strong>roulette</p>
     )
 }

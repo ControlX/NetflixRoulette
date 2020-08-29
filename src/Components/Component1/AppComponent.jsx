@@ -4,13 +4,22 @@ import Header from './Header'
 import Footer from './Footer'
 import MovieList from './MoviesList'
 import ErrorBoundary from './ErrorBoundary'
+import DummyInvisionListing from './utils/Constants'
 
 export default function AppComponent(){
+    const MovieListing = DummyInvisionListing();
+
     return (
         <>
-            <Header />
+            <div className='parent-header-properties'>
+            <Header/>
+            </div>
             <ErrorBoundary>
-                <MovieList />
+                <div className='parent-background-properties'>
+                <MovieList 
+                    listing={MovieListing}
+                />
+                </div>
             </ErrorBoundary>
             <Footer />
         </>

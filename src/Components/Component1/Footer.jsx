@@ -1,7 +1,5 @@
 import React from 'react'
 
 export default function Footer(){
-    return (
-        {}//Nothing for now
-    )
+    return null;
 }

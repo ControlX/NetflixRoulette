@@ -1,14 +1,14 @@
 const path = require('path');
 const HWP = require('html-webpack-plugin');
-module.exports = {
+module.exports = {  
     mode: 'production',
     entry: path.join(__dirname, '/src/index.js'),
     output: {
        filename: 'build.js',
-       path: path.join(__dirname, '/prod/dist')},
+       path: path.join(__dirname, '/dev/dist')},
     module:{
        rules:[{
-          test: /\.js$/,
+          test: /\.(js|jsx)$/,
           exclude: /node_modules/,
           loader: 'babel-loader',
           options: {
@@ -23,12 +23,12 @@ module.exports = {
        },
        {
          test: /\.(jpe?g|png|gif|svg)$/i, 
-         loader: "file-loader?name=/public/icons/[name].[ext]"
+         loader: 'url-loader'
        }]
     },
     resolve: {
       modules: [path.resolve(__dirname, "/src"), "node_modules"],
-      extensions: [".js", ".json"],
+      extensions: [".js", ".jsx", ".json"],
     },
     plugins:[
        new HWP(

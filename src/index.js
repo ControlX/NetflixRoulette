@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import AppComponent from './Components/Component1/AppComponent'
-import './Components/Component1/styles.css'
+import './Components/Component1/css/styles.css'
 
 const App = () => (
-    <div className='main-div-properties'>
-        {<AppComponent />}
+    <div>
+        <AppComponent />
     </div>
 )
 
