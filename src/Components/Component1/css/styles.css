@@ -11,7 +11,7 @@
 
 .parent-background-properties {
     background-color: #232323;
-    margin: 0% 10% 10% 10%;
+    margin: 0% 10% 2% 10%;
     overflow: hidden;
     position: relative;
     height: 100%;
@@ -19,7 +19,7 @@
 
 .parent-header-properties {
     background-color: #232323;
-    margin: 10% 10% 2% 10%;
+    margin: 2% 10% 2% 10%;
     padding: 3%;
     overflow: hidden;
     position: relative;
