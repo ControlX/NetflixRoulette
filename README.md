@@ -3,11 +3,17 @@
 <<=== Advance Components ===>>
 
 Added Add/Edit/Delete feature
+
 Added Sort
+
 Added ErrorBoundary
+
 Added Lazy component loading
+
 Used Stateful and Stateless components
+
 User markup and styles
+
 Implemented lifecycle events
 
 <<=== Session 2: Webpack ===>>
