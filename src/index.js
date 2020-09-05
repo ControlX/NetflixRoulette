@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import AppComponent from './Components/Component1/AppComponent'
-import './Components/Component1/css/styles.css'
+import RouletteMain from './components/RouletteMain'
+import './components/RouletteMain/roulette_main.css'
 
 const App = () => (
     <div>
-        <AppComponent />
+        <RouletteMain />
     </div>
 )
 

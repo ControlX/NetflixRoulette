@@ -1,0 +1,17 @@
+.parent-sort-div{
+    right: 90px;
+    position: absolute;
+    margin-top: 10px;
+}
+
+.parent-sort-select{
+    background-color: #232323;
+    color: #F65261;
+    margin-right: 40px;
+    padding: 10px 20px;
+}
+
+.parent-sort-label{
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.219);
+}

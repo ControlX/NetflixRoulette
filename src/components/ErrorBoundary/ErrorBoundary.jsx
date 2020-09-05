@@ -2,14 +2,14 @@ import React from 'react'
 
 function ErrorBoundary(props){
     const ErrorText = () => (
-        <h2>
+        <p className="parent-general-message">
             Something is not right here, please try again later...
-        </h2>
+        </p>
     )
 
-    let isError = false;
+    // let isError = props.isError;
 
-    return <>{!isError ? props.children : <ErrorText />}</>
+    return <>{!props.isError ? props.children : <ErrorText />}</>
 }
 
 export default ErrorBoundary

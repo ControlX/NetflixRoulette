@@ -5,7 +5,7 @@ module.exports = {
     entry: path.join(__dirname, '/src/index.js'),
     output: {
        filename: 'build.js',
-       path: path.join(__dirname, '/dev/dist')},
+       path: path.join(__dirname, '/prod/dist')},
     module:{
        rules:[{
           test: /\.(js|jsx)$/,
