@@ -4,3 +4,6 @@
     width: 350px;
     height: 550px;
 }
+.gallery:hover .dots-properties{
+    display: block;
+}

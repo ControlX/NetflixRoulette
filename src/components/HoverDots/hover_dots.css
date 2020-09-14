@@ -8,6 +8,7 @@
     z-index: 999;
     cursor: pointer;
     margin-top: 10px;
+    display: none;
   }
   .dots-properties:after {
     content: '';
