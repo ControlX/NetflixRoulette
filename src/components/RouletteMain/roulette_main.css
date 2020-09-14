@@ -1,0 +1,44 @@
+/* .gallery:hover {
+    border: 1px solid rgba(119, 119, 119, 0.5);
+} */
+
+.parent-background-properties {
+    background-color: #232323;
+    margin: 0% 10% 0% 10%;
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+}
+
+.parent-header-properties {
+    background-color: #232323;
+    margin: 2% 10% 2% 10%;
+    overflow: hidden;
+    position: relative;
+    height: 400px;
+}
+
+.parent-footer-properties {
+    background-color: #23232359;
+    margin: 0% 10% 2% 10%;
+    overflow: hidden;
+    position: relative;
+    height: 75px;
+}
+
+.parent-general-message {
+    background-color: #232323;
+    margin: 0% 10% 0% 10%;
+    overflow: hidden;
+    position: relative;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    color: #F65261;
+    font-size: 34px;
+}
+
+.loader-properties{
+    top: 50%;
+    left:50%;
+    color: white;
+}

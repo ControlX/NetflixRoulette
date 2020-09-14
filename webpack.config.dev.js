@@ -8,7 +8,7 @@ module.exports = {
        path: path.join(__dirname, '/dev/dist')},
     module:{
        rules:[{
-          test: /\.js$/,
+          test: /\.(js|jsx)$/,
           exclude: /node_modules/,
           loader: 'babel-loader',
           options: {
@@ -16,7 +16,19 @@ module.exports = {
                       '@babel/react',{
                       'plugins': ['@babel/plugin-proposal-class-properties']}]
         }
+       },
+       {
+         test: /\.css$/,
+         use: ['style-loader', 'css-loader']
+       },
+       {
+         test: /\.(jpe?g|png|gif|svg)$/i, 
+         loader: 'url-loader'
        }]
+    },
+    resolve: {
+      modules: [path.resolve(__dirname, "/src"), "node_modules"],
+      extensions: [".js", ".jsx", ".json"],
     },
     plugins:[
        new HWP(
