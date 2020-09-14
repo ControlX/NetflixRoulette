@@ -14,13 +14,16 @@ class RouletteMain extends Component {
         super(props);
         this.state = {
             movieList: [],
-            sortOption: "year", 
+            filterList: [],
+            sortOption: "year",
+            filterOption: "all",
             isError: false,
             isAddModalVisible: false,
             isEditModalVisible: false,
             isDeleteModalVisible: false,
             processEditMovieField: {},
-            processDeleteMovieField: {}
+            processDeleteMovieField: {},
+            updateFilterResultText: 0
         }
     }
 
@@ -67,10 +70,31 @@ class RouletteMain extends Component {
         this.onCloseAction();
     }
 
+    async onSortCategoryClicked(event){
+        let type = event.target.value;
+        switch(type){
+            case "all":
+                let list = await this.fetchMovieListing();
+                let stateList = this.sortByKey(list, this.state.sortOption);
+                this.setState({ filterOption: type, updateFilterResultText : stateList.length, movieList: stateList })
+                break;
+            case "documentary":
+            case "comedy":
+            case "horror":
+            case "crime":
+                let initialList = await this.fetchMovieListing();
+                this.setState({ movieList: initialList })
+                let newList = [...this.state.movieList];
+                let newStateList = this.filterByGenreType(newList, type);
+                this.setState({ filterOption: type, updateFilterResultText : newStateList.length, movieList: newStateList })
+                break;
+        }
+    }
+
     onHandleSelect(event){
         this.setState({sortOption: event.target.value})
         let stateList = this.sortByKey(this.state.movieList, event.target.value);
-        this.setState({ movieList: stateList })
+        this.setState({ updateFilterResultText : stateList.length, movieList: stateList })
     }
 
     sortByKey(array, key) {
@@ -80,10 +104,14 @@ class RouletteMain extends Component {
         });
     }
 
+    filterByGenreType(array, key) {
+        return array.filter(item => item.description.toLowerCase().includes(key))
+    }
+
     async componentDidMount() {
         let list = await this.fetchMovieListing();
         let stateList = this.sortByKey(list, this.state.sortOption);
-        this.setState({ movieList: stateList })
+        this.setState({ updateFilterResultText: stateList.length, movieList: stateList })
     }
 
     async fetchMovieListing() {
@@ -107,7 +135,11 @@ class RouletteMain extends Component {
                 </div>
 
                 <div className='parent-background-properties'>
-                    <SortListing onHandleSelect={this.onHandleSelect.bind(this)}/>
+                    <SortListing onHandleSelect={this.onHandleSelect.bind(this)} 
+                        onSortCategoryClicked={this.onSortCategoryClicked.bind(this)} 
+                        updateFilterResultText={this.state.updateFilterResultText}
+                        filterOption={this.state.filterOption}
+                        />
                     <ErrorBoundary
                         isError={this.state.isError}>
                         <React.Suspense
