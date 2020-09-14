@@ -3,14 +3,11 @@ import Header from '../Header'
 import Footer from '../Footer'
 import ErrorBoundary from '../ErrorBoundary'
 import { ProcessGetRequest } from '../../utils/RestUtils'
-import EditMovie from '../EditMovie'
-import AddMovie from '../AddMovie'
+import AddEditMovie from '../AddEditMovie'
 import DeleteMovie from '../DeleteMovie'
 import SortListing from '../SortListing'
 import "regenerator-runtime"
-const MoviesList = React.lazy(() => {
-    return new Promise(resolve => setTimeout(resolve, 500)).then(() => import("../MoviesList"));
-})
+const MoviesList = React.lazy(() => import("../MoviesList"));
 
 class RouletteMain extends Component {
     constructor(props) {
@@ -33,14 +30,14 @@ class RouletteMain extends Component {
 
     onEditAction(id) {
         let stateList = this.state.movieList;
-        stateList.forEach((obj, i) => { if (obj.id === id) { this.setState({ processEditMovieField: obj }) } });
-        this.setState({ isEditModalVisible: true })
+        let listObject = stateList.find(obj => obj.id === id)
+        this.setState({ processEditMovieField: listObject, isEditModalVisible: true })
     }
 
     onDeleteAction(id) {
         let stateList = this.state.movieList;
-        stateList.forEach((obj, i) => { if (obj.id === id) { this.setState({ processDeleteMovieField: obj }) } });
-        this.setState({ isDeleteModalVisible: true })
+        let listObject = stateList.find(obj => obj.id === id);
+        this.setState({ processDeleteMovieField: listObject, isDeleteModalVisible: true })
     }
 
     onCloseAction() {
@@ -52,12 +49,12 @@ class RouletteMain extends Component {
         let uniqueId = stateList.length + 1;
         item.id = uniqueId;
         stateList.push(item);
-        this.setState({ movieList: stateList })
+        this.setState({ movieList: [...this.state.movieList, item] })
         this.onCloseAction();
     }
 
     onSaveAction(item) {
-        let stateList = this.state.movieList;
+        let stateList = [...this.state.movieList];
         stateList.forEach((obj, i) => { if (obj.id === item.id) { stateList[i] = item } });
         this.setState({ movieList: stateList })
         this.onCloseAction();
@@ -65,8 +62,8 @@ class RouletteMain extends Component {
 
     onConfirmAction(item) {
         let stateList = this.state.movieList;
-        stateList.forEach((obj, i, jsonObj) => { if (obj.id === item.id) { jsonObj.splice(i, 1); } });
-        this.setState({ movieList: stateList })
+        let modList = stateList.filter((obj) => obj.id !== item.id);
+        this.setState({ movieList: modList })
         this.onCloseAction();
     }
 
@@ -127,13 +124,13 @@ class RouletteMain extends Component {
                     <Footer />
                 </div>
                 {(this.state.isEditModalVisible) ?
-                    <EditMovie
+                    <AddEditMovie
                         processEditMovieField={this.state.processEditMovieField}
                         onCloseAction={this.onCloseAction.bind(this)}
                         onSaveAction={this.onSaveAction.bind(this)}
                     /> : null}
                 {(this.state.isAddModalVisible) ?
-                    <AddMovie
+                    <AddEditMovie
                         onCloseAction={this.onCloseAction.bind(this)}
                         onSubmitAction={this.onSubmitAction.bind(this)}
                     /> : null}

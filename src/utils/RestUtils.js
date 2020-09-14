@@ -13,9 +13,9 @@ export function ProcessGetRequest() {
             else{
                 response.data = null;
                 response.status = 400;
-                reject(Error(response))
+                response.error = "Requested information is not found: ";
+                reject(Error(response.error + response.status))
             }
-            return;
         }, 500);
     })
 }

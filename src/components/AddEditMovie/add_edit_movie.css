@@ -95,14 +95,6 @@
     width: 80%;
   }
 
-  .modal-body-input-disabled{
-    font-size: 20px;
-    padding: 20px 15px;
-    background-color: #42424200;
-    color: #FFFFFF;
-    width: 80%;
-  }
-
   .modal-btn-reset{
     background-color: #232323;
     color: #F65261;
@@ -126,3 +118,10 @@
     float: right;
 }
 
+.modal-body-input-disabled{
+    font-size: 20px;
+    padding: 20px 15px;
+    background-color: #42424200;
+    color: #FFFFFF;
+    width: 80%;
+  }
