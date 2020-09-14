@@ -8,6 +8,7 @@
     overflow: hidden;
     position: relative;
     height: 100%;
+    padding: 2% 1% 2% 1%;
 }
 
 .parent-header-properties {
@@ -28,11 +29,9 @@
 
 .parent-general-message {
     background-color: #232323;
-    margin: 0% 10% 0% 10%;
+    margin: 10% 10% 10% 10%;
     overflow: hidden;
     position: relative;
-    margin-top: 10%;
-    margin-bottom: 10%;
     color: #F65261;
     font-size: 34px;
 }
