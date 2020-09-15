@@ -20,6 +20,7 @@ export default function MoviesList(props){
                 runtime={movie.runtime}
                 onEditAction={props.onEditAction}
                 onDeleteAction={props.onDeleteAction}
+                onShowMovieDetailsAction={props.onShowMovieDetailsAction}
             />
             </div> : null
         ))}

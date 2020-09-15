@@ -4,9 +4,12 @@ export default function LoadMovieJson() {
             title: 'Pulp Fiction',
             description: 'Action & Adventure',
             year: 1990,
-            src: './src/resources/movie_poster0.png',
+            src: './src/resources/movie_poster3.png',
             id: 1,
-            isEnabled: true
+            rating: 4.1,
+            isEnabled: true,
+            runtime: 152,
+            overview: 'Pulp Fiction is a 1994 American neo-noir black comedy crime film written and directed by Quentin Tarantino, who conceived it with Roger Avary.[4] Starring John Travolta, Samuel L. Jackson, Bruce Willis, Tim Roth, Ving Rhames, and Uma Thurman, it tells several stories of criminal Los Angeles. The title refers to the pulp magazines and hardboiled crime novels popular during the mid-20th century, known for their graphic violence and punchy dialogue.'
         },
         {
             title: 'Inception',
@@ -14,7 +17,10 @@ export default function LoadMovieJson() {
             year: 2003,
             src: './src/resources/movie_poster1.png',
             id: 2,
-            isEnabled: true
+            rating: 4.1,
+            isEnabled: true,
+            runtime: 124,
+            overview: 'Pulp Fiction is a 1994 American neo-noir black comedy crime film written and directed by Quentin Tarantino, who conceived it with Roger Avary.[4] Starring John Travolta, Samuel L. Jackson, Bruce Willis, Tim Roth, Ving Rhames, and Uma Thurman, it tells several stories of criminal Los Angeles. The title refers to the pulp magazines and hardboiled crime novels popular during the mid-20th century, known for their graphic violence and punchy dialogue.'
         },
         {
             title: 'Bohemian Rhapsody',
@@ -22,39 +28,54 @@ export default function LoadMovieJson() {
             year: 2019,
             src: './src/resources/movie_poster2.png',
             id: 3,
-            isEnabled: true
+            rating: 4.9,
+            isEnabled: true,
+            runtime: 254,
+            overview: 'Pulp Fiction is a 1994 American neo-noir black comedy crime film written and directed by Quentin Tarantino, who conceived it with Roger Avary.[4] Starring John Travolta, Samuel L. Jackson, Bruce Willis, Tim Roth, Ving Rhames, and Uma Thurman, it tells several stories of criminal Los Angeles. The title refers to the pulp magazines and hardboiled crime novels popular during the mid-20th century, known for their graphic violence and punchy dialogue.'
         },
         {
-            title: 'Inception',
+            title: 'The Notebook',
             description: 'Crime/ Thriller',
-            year: 1990,
+            year: 1965,
             src: './src/resources/movie_poster1.png',
             id: 4,
-            isEnabled: true
+            rating: 4.5,
+            isEnabled: true,
+            runtime: 121,
+            overview: 'Pulp Fiction is a 1994 American neo-noir black comedy crime film written and directed by Quentin Tarantino, who conceived it with Roger Avary.[4] Starring John Travolta, Samuel L. Jackson, Bruce Willis, Tim Roth, Ving Rhames, and Uma Thurman, it tells several stories of criminal Los Angeles. The title refers to the pulp magazines and hardboiled crime novels popular during the mid-20th century, known for their graphic violence and punchy dialogue.'
         },
         {
-            title: 'Pulp Fiction',
+            title: 'For A Few Dollars More',
             description: 'Action & Adventure',
-            year: 1990,
-            src: './src/resources/movie_poster0.png',
+            year: 1920,
+            src: './src/resources/movie_poster3.png',
             id: 5,
-            isEnabled: true
+            rating: 5.0,
+            isEnabled: true,
+            runtime: 253,
+            overview: 'Pulp Fiction is a 1994 American neo-noir black comedy crime film written and directed by Quentin Tarantino, who conceived it with Roger Avary.[4] Starring John Travolta, Samuel L. Jackson, Bruce Willis, Tim Roth, Ving Rhames, and Uma Thurman, it tells several stories of criminal Los Angeles. The title refers to the pulp magazines and hardboiled crime novels popular during the mid-20th century, known for their graphic violence and punchy dialogue.'
         },
         {
             title: 'Inception',
             description: 'Crime/ Thriller',
-            year: 1990,
+            year: 2011,
             src: './src/resources/movie_poster2.png',
             id: 6,
-            isEnabled: true
+            rating: 4.5,
+            isEnabled: true,
+            runtime: 134,
+            overview: 'Pulp Fiction is a 1994 American neo-noir black comedy crime film written and directed by Quentin Tarantino, who conceived it with Roger Avary.[4] Starring John Travolta, Samuel L. Jackson, Bruce Willis, Tim Roth, Ving Rhames, and Uma Thurman, it tells several stories of criminal Los Angeles. The title refers to the pulp magazines and hardboiled crime novels popular during the mid-20th century, known for their graphic violence and punchy dialogue.'
         },
         {
-            title: 'Pulp Fiction',
-            description: 'Action & Adventure',
-            year: 1990,
-            src: './src/resources/movie_poster2.png',
+            title: 'Reservoir Dogs',
+            description: 'Crime, Action & Adventure',
+            year: 2005,
+            src: './src/resources/movie_poster4.png',
             id: 7,
-            isEnabled: true
+            rating: 4.2,
+            isEnabled: true,
+            runtime: 182,
+            overview: 'Pulp Fiction is a 1994 American neo-noir black comedy crime film written and directed by Quentin Tarantino, who conceived it with Roger Avary.[4] Starring John Travolta, Samuel L. Jackson, Bruce Willis, Tim Roth, Ving Rhames, and Uma Thurman, it tells several stories of criminal Los Angeles. The title refers to the pulp magazines and hardboiled crime novels popular during the mid-20th century, known for their graphic violence and punchy dialogue.'
         },
         {
             title: 'Inception',
@@ -62,39 +83,54 @@ export default function LoadMovieJson() {
             year: 1990,
             src: './src/resources/movie_poster1.png',
             id: 8,
-            isEnabled: true
+            rating: 3.2,
+            isEnabled: true,
+            runtime: 154,
+            overview: 'Pulp Fiction is a 1994 American neo-noir black comedy crime film written and directed by Quentin Tarantino, who conceived it with Roger Avary.[4] Starring John Travolta, Samuel L. Jackson, Bruce Willis, Tim Roth, Ving Rhames, and Uma Thurman, it tells several stories of criminal Los Angeles. The title refers to the pulp magazines and hardboiled crime novels popular during the mid-20th century, known for their graphic violence and punchy dialogue.'
         },
         {
             title: 'Pulp Fiction',
             description: 'Action & Adventure',
-            year: 1990,
+            year: 1993,
             src: './src/resources/movie_poster0.png',
             id: 9,
-            isEnabled: true
+            rating: 3.3,
+            isEnabled: true,
+            runtime: 154,
+            overview: 'Pulp Fiction is a 1994 American neo-noir black comedy crime film written and directed by Quentin Tarantino, who conceived it with Roger Avary.[4] Starring John Travolta, Samuel L. Jackson, Bruce Willis, Tim Roth, Ving Rhames, and Uma Thurman, it tells several stories of criminal Los Angeles. The title refers to the pulp magazines and hardboiled crime novels popular during the mid-20th century, known for their graphic violence and punchy dialogue.'
         },
         {
             title: 'Inception',
             description: 'Crime/ Thriller',
-            year: 1990,
+            year: 1994,
             src: './src/resources/movie_poster1.png',
             id: 10,
-            isEnabled: true
+            rating: 3.5,
+            isEnabled: true,
+            runtime: 154,
+            overview: 'Pulp Fiction is a 1994 American neo-noir black comedy crime film written and directed by Quentin Tarantino, who conceived it with Roger Avary.[4] Starring John Travolta, Samuel L. Jackson, Bruce Willis, Tim Roth, Ving Rhames, and Uma Thurman, it tells several stories of criminal Los Angeles. The title refers to the pulp magazines and hardboiled crime novels popular during the mid-20th century, known for their graphic violence and punchy dialogue.'
         },
         {
             title: 'Pulp Fiction',
             description: 'Action & Adventure',
-            year: 1990,
+            year: 1995,
             src: './src/resources/movie_poster0.png',
             id: 11,
-            isEnabled: true
+            rating: 3.7,
+            isEnabled: true,
+            runtime: 154,
+            overview: 'Pulp Fiction is a 1994 American neo-noir black comedy crime film written and directed by Quentin Tarantino, who conceived it with Roger Avary.[4] Starring John Travolta, Samuel L. Jackson, Bruce Willis, Tim Roth, Ving Rhames, and Uma Thurman, it tells several stories of criminal Los Angeles. The title refers to the pulp magazines and hardboiled crime novels popular during the mid-20th century, known for their graphic violence and punchy dialogue.'
         },
         {
             title: 'Inception',
             description: 'Crime/ Thriller',
-            year: 1990,
+            year: 1996,
             src: './src/resources/movie_poster2.png',
             id: 12,
-            isEnabled: true
+            rating: 3.9,
+            isEnabled: true,
+            runtime: 154,
+            overview: 'Pulp Fiction is a 1994 American neo-noir black comedy crime film written and directed by Quentin Tarantino, who conceived it with Roger Avary.[4] Starring John Travolta, Samuel L. Jackson, Bruce Willis, Tim Roth, Ving Rhames, and Uma Thurman, it tells several stories of criminal Los Angeles. The title refers to the pulp magazines and hardboiled crime novels popular during the mid-20th century, known for their graphic violence and punchy dialogue.'
         },
         {
             title: 'The World War - II',
@@ -102,7 +138,10 @@ export default function LoadMovieJson() {
             year: 2016,
             src: './src/resources/movie_poster3.png',
             id: 13,
-            isEnabled: true
+            rating: 4.7,
+            isEnabled: true,
+            runtime: 154,
+            overview: 'Pulp Fiction is a 1994 American neo-noir black comedy crime film written and directed by Quentin Tarantino, who conceived it with Roger Avary.[4] Starring John Travolta, Samuel L. Jackson, Bruce Willis, Tim Roth, Ving Rhames, and Uma Thurman, it tells several stories of criminal Los Angeles. The title refers to the pulp magazines and hardboiled crime novels popular during the mid-20th century, known for their graphic violence and punchy dialogue.'
         },
         {
             title: 'My Cousin Vinny',
@@ -110,7 +149,21 @@ export default function LoadMovieJson() {
             year: 1993,
             src: './src/resources/movie_poster3.png',
             id: 14,
-            isEnabled: true
+            rating: 5.0,
+            isEnabled: true,
+            runtime: 154,
+            overview: 'Pulp Fiction is a 1994 American neo-noir black comedy crime film written and directed by Quentin Tarantino, who conceived it with Roger Avary.[4] Starring John Travolta, Samuel L. Jackson, Bruce Willis, Tim Roth, Ving Rhames, and Uma Thurman, it tells several stories of criminal Los Angeles. The title refers to the pulp magazines and hardboiled crime novels popular during the mid-20th century, known for their graphic violence and punchy dialogue.'
+        },
+        {
+            title: 'Avengers',
+            description: 'Comedy',
+            year: 1991,
+            src: './src/resources/movie_poster4.png',
+            id: 15,
+            rating: 4.0,
+            isEnabled: true,
+            runtime: 154,
+            overview: 'Pulp Fiction is a 1994 American neo-noir black comedy crime film written and directed by Quentin Tarantino, who conceived it with Roger Avary.[4] Starring John Travolta, Samuel L. Jackson, Bruce Willis, Tim Roth, Ving Rhames, and Uma Thurman, it tells several stories of criminal Los Angeles. The title refers to the pulp magazines and hardboiled crime novels popular during the mid-20th century, known for their graphic violence and punchy dialogue.'
         }
     ]
 }

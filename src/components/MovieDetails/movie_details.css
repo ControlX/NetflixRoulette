@@ -1,0 +1,62 @@
+.movie-details-search{
+    position: absolute;
+    right: 3%;
+    top: 5%;
+}
+
+.movie-details-parent{
+    position: relative;
+    width: 100%;
+    padding: 2% 5%;
+}
+
+.movie-details-movie-placeholder{
+    float: left;
+    width: 30%;
+}
+
+.movie-details-information{
+    float: unset;
+    width: 85%;
+    padding-left: 0%;
+}
+
+.movie-details-title-name{
+    font-size: 42px;
+    color: white;
+
+}
+
+span.movie-details-rating {
+    background: #01010115;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    color: #5d9b62;
+    display: inline-block;
+    font-weight: lighter;
+    line-height: 70px;
+    margin-right: 5px;
+    text-align: center;
+    width: 70px;
+    border: solid 1px white;
+    font-size: 34px;
+    margin-left: 20px;
+}
+
+.movie-details-genre{
+    color: rgba(255, 255, 255, 0.623);
+    font-size: 20px;
+    margin-top: -8px;
+}
+
+.movie-details-year-runtime{
+    color: #F65261;
+    font-size: 30px;
+    font-weight: lighter;
+}
+
+.movie-details-overview{
+    color: rgba(255, 255, 255, 0.623);
+    font-size: 20px;
+}

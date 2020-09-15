@@ -14,7 +14,7 @@ export default function MovieCard(props){
                 <a onClick={()=>props.onDeleteAction(props.id)}>Delete</a>
             </div>
             </div>
-            <div className='card-image-properties'> <img src={props.src} /></div>
+            <div className='card-image-properties' onClick={()=>props.onShowMovieDetailsAction(props.id)}> <img src={props.src} /></div>
             <div className='card-text-properties'>
                 <div className='div-child-left'>
                     <p className='card-movie-name-font-properties'>{props.title}</p>

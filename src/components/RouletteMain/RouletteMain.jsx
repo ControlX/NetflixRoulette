@@ -7,6 +7,7 @@ import AddEditMovie from '../AddEditMovie'
 import DeleteMovie from '../DeleteMovie'
 import SortFilterListing from '../SortFilterListing'
 import "regenerator-runtime"
+import MovieDetails from '../MovieDetails'
 const MoviesList = React.lazy(() => import("../MoviesList"));
 
 class RouletteMain extends Component {
@@ -19,8 +20,10 @@ class RouletteMain extends Component {
             isAddModalVisible: false,
             isEditModalVisible: false,
             isDeleteModalVisible: false,
+            isMovieDetailsVisible: false,
             processEditMovieField: {},
             processDeleteMovieField: {},
+            processMovieDetailsInfo: {},
             updateFilterResultText: 0
         }
     }
@@ -42,7 +45,7 @@ class RouletteMain extends Component {
     }
 
     onCloseAction() {
-        this.setState({ isAddModalVisible: false, isEditModalVisible: false, isDeleteModalVisible: false })
+        this.setState({ isAddModalVisible: false, isEditModalVisible: false, isDeleteModalVisible: false, isMovieDetailsVisible: false })
     }
 
     onSubmitAction(item) {
@@ -69,7 +72,14 @@ class RouletteMain extends Component {
         this.onCloseAction();
     }
 
-    async onFilterCategoryClicked(event){
+    onShowMovieDetailsAction(id){
+        let stateList = [...this.state.movieList];
+        let listObject = stateList.find(obj => obj.id === id)
+        this.setState({ processMovieDetailsInfo: listObject, isMovieDetailsVisible: true })
+        window.scrollTo(0, 0);
+    }
+
+    onFilterCategoryClicked(event){
         let type = event.target.value;
         switch(type){
             case "all":
@@ -122,6 +132,10 @@ class RouletteMain extends Component {
         return filteredList;
     }
 
+    onMovieDetailsSearch(){
+        this.setState({isMovieDetailsVisible: false})
+    }
+
     async componentDidMount() {
         let list = await this.fetchMovieListing();
         let stateList = this.sortByKey(list, this.state.sortOption);
@@ -141,12 +155,22 @@ class RouletteMain extends Component {
     render() {
         return (
             <>
+                {(this.state.isMovieDetailsVisible) ?
+                <div className='parent-header-movie-details-properties'>
+                <div className='parent-header-layer'>
+                <MovieDetails
+                    processMovieDetailsInfo={this.state.processMovieDetailsInfo}
+                    onMovieDetailsSearch={this.onMovieDetailsSearch.bind(this)}
+                />
+                </div>
+                </div> :
                 <div className='parent-header-properties'>
                     <Header
                         isAddModalVisible={this.state.isAddModalVisible}
                         onAddAction={this.onAddAction.bind(this)}
                     />
                 </div>
+                }
 
                 <div className='parent-background-properties'>
                     <SortFilterListing onHandleSelect={this.onHandleSelect.bind(this)} 
@@ -161,6 +185,7 @@ class RouletteMain extends Component {
                                 listing={this.state.movieList}
                                 onEditAction={this.onEditAction.bind(this)}
                                 onDeleteAction={this.onDeleteAction.bind(this)}
+                                onShowMovieDetailsAction={this.onShowMovieDetailsAction.bind(this)}
                             />
                         </React.Suspense>
                     </ErrorBoundary>
