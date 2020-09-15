@@ -32,7 +32,7 @@ export default function SortFilterListing(props) {
                 </select>
             </div>
             <div className="sort-result-number">
-                <p><label><strong>{props.updateFilterResultText}</strong></label>  movies found</p>
+    <p><label><strong>{props.updateFilterResultText}</strong></label>  {(props.updateFilterResultText === 1) ? '  movie found' : '  movies found'}</p>
             </div>
         </div>
     </>
