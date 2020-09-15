@@ -14,7 +14,7 @@ export default function MovieDetails(props){
             </div>
             <div className='movie-details-information'>
                 <label className='movie-details-title-name'>{props.processMovieDetailsInfo.title}</label>
-                <span className='movie-details-rating'>{props.processMovieDetailsInfo.rating}</span>
+                <span className='movie-details-rating'>{(props.processMovieDetailsInfo.rating !== undefined) ? props.processMovieDetailsInfo.rating : 'NA'}</span>
                 <p className='movie-details-genre'>{props.processMovieDetailsInfo.description}</p>
                 <p className='movie-details-year-runtime'>{props.processMovieDetailsInfo.year + '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0' + props.processMovieDetailsInfo.runtime + ' min'}</p>
                 <p className='movie-details-overview'>{props.processMovieDetailsInfo.overview}</p>

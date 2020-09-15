@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Header from '../Header'
 import Footer from '../Footer'
 import ErrorBoundary from '../ErrorBoundary'
@@ -6,213 +6,229 @@ import { ProcessGetRequest } from '../../utils/RestUtils'
 import AddEditMovie from '../AddEditMovie'
 import DeleteMovie from '../DeleteMovie'
 import SortFilterListing from '../SortFilterListing'
-import "regenerator-runtime"
 import MovieDetails from '../MovieDetails'
+import "regenerator-runtime"
 const MoviesList = React.lazy(() => import("../MoviesList"));
 
-class RouletteMain extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            movieList: [],
-            sortOption: "year",
-            isError: false,
-            isAddModalVisible: false,
-            isEditModalVisible: false,
-            isDeleteModalVisible: false,
-            isMovieDetailsVisible: false,
-            processEditMovieField: {},
-            processDeleteMovieField: {},
-            processMovieDetailsInfo: {},
-            updateFilterResultText: 0
-        }
+export default function RouletteMain(props) {
+    const [isError, setError] = useState(false);
+    const [movieList, setMovieList] = useState([]);
+    const [sortOption, setSortOption] = useState("year");
+    const [filterOption, setFilterOption] = useState("all");
+    const [isAddModalVisible, setAddModalVisible] = useState(false);
+    const [isEditModalVisible, setEditModalVisible] = useState(false);
+    const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
+    const [isMovieDetailsVisible, setMovieDetailsVisible] = useState(false);
+    const [processEditMovieField, setProcessEditMovieField] = useState({});
+    const [processDeleteMovieField, setProcessDeleteMovieField] = useState({});
+    const [processMovieDetailsInfo, setProcessMovieDetailsInfo] = useState({});
+    const [updateFilterResultText, setUpdateFilterResultText] = useState(0);
+
+    function onAddAction() {
+        setAddModalVisible(true);
     }
 
-    onAddAction() {
-        this.setState({ isAddModalVisible: true })
-    }
-
-    onEditAction(id) {
-        let stateList = this.state.movieList;
+    function onEditAction(id) {
+        let stateList = [...movieList];
         let listObject = stateList.find(obj => obj.id === id)
-        this.setState({ processEditMovieField: listObject, isEditModalVisible: true })
+        setProcessEditMovieField(listObject);
+        setEditModalVisible(true);
     }
 
-    onDeleteAction(id) {
-        let stateList = this.state.movieList;
+    function onDeleteAction(id) {
+        let stateList = [...movieList];
         let listObject = stateList.find(obj => obj.id === id);
-        this.setState({ processDeleteMovieField: listObject, isDeleteModalVisible: true })
+        setProcessDeleteMovieField(listObject);
+        setDeleteModalVisible(true);
     }
 
-    onCloseAction() {
-        this.setState({ isAddModalVisible: false, isEditModalVisible: false, isDeleteModalVisible: false, isMovieDetailsVisible: false })
+    function onCloseAction() {
+        setAddModalVisible(false);
+        setEditModalVisible(false);
+        setDeleteModalVisible(false);
+        setMovieDetailsVisible(false);
     }
 
-    onSubmitAction(item) {
-        let stateList = [...this.state.movieList];
+    function onSubmitAction(item) {
+        let stateList = [...movieList];
         let uniqueId = stateList.length + 1;
         item.id = uniqueId;
         item.isEnabled = true;
         stateList.push(item);
-        this.setState({ updateFilterResultText : stateList.length, movieList: stateList })
-        this.onCloseAction();
+        let newStateList = filterByGenreType(stateList, filterOption);
+        setMovieList(newStateList);
+        onCloseAction();
     }
 
-    onSaveAction(item) {
-        let stateList = [...this.state.movieList];
+    function onSaveAction(item) {
+        let stateList = [...movieList];
         stateList.forEach((obj, i) => { if (obj.id === item.id) { stateList[i] = item } });
-        this.setState({ movieList: stateList })
-        this.onCloseAction();
+        let newStateList = filterByGenreType(stateList, filterOption);
+        setMovieList(newStateList);
+        onCloseAction();
     }
 
-    onConfirmAction(item) {
-        let stateList = this.state.movieList;
+    function onConfirmAction(item) {
+        let stateList = [...movieList];
         let modList = stateList.filter((obj) => obj.id !== item.id);
-        this.setState({ movieList: modList })
-        this.onCloseAction();
+        let newStateList = filterByGenreType(modList, filterOption);
+        setMovieList(newStateList);
+        onCloseAction();
     }
 
-    onShowMovieDetailsAction(id){
-        let stateList = [...this.state.movieList];
-        let listObject = stateList.find(obj => obj.id === id)
-        this.setState({ processMovieDetailsInfo: listObject, isMovieDetailsVisible: true })
+    function onShowMovieDetailsAction(id) {
+        let stateList = [...movieList];
+        let listObject = stateList.find(obj => obj.id === id);
+        setProcessMovieDetailsInfo(listObject);
+        setMovieDetailsVisible(true);
         window.scrollTo(0, 0);
     }
 
-    onFilterCategoryClicked(event){
+    function onFilterCategoryClicked(event) {
         let type = event.target.value;
-        switch(type){
+        switch (type) {
             case "all":
-                let list = [...this.state.movieList];
-                list = this.enableAllMovieCards(list);
-                let stateList = this.sortByKey(list, this.state.sortOption);
-                this.setState({ updateFilterResultText : stateList.length, movieList: stateList })
+                let list = [...movieList];
+                list = enableAllMovieCards(list);
+                let stateList = sortByKey(list, sortOption);
+                setUpdateFilterResultText(stateList.length);
+                setMovieList(stateList);
                 break;
             default:
-                let newList = [...this.state.movieList];
-                let newStateList = this.filterByGenreType(newList, type);
-                this.setState({movieList: newStateList })
+                let newList = [...movieList];
+                let newStateList = filterByGenreType(newList, type);
+                setMovieList(newStateList);
                 break;
         }
+        setFilterOption(type);
     }
 
-    onHandleSelect(event){
-        this.setState({sortOption: event.target.value})
-        let stateList = this.sortByKey(this.state.movieList, event.target.value);
-        this.setState({ updateFilterResultText : stateList.length, movieList: stateList })
+    function onHandleSelect(event) {
+        setSortOption(event.target.value);
+        let stateList = sortByKey(movieList, event.target.value);
+        setMovieList(stateList);
     }
 
-    sortByKey(array, key) {
-        return array.sort(function(a, b) {
+    function sortByKey(array, key) {
+        return array.sort(function (a, b) {
             var x = a[key]; var y = b[key];
             return ((x < y) ? -1 : ((x > y) ? 1 : 0));
         });
     }
 
-    enableAllMovieCards(list){
+    function enableAllMovieCards(list) {
         return list.map(item => {
             item.isEnabled = true;
             return item;
         })
     }
 
-    filterByGenreType(array, key) {
+    function filterByGenreType(array, key) {
         let enabledCount = 0;
-        let filteredList = array.map(item => {
-            if(item.description.toLowerCase().includes(key)){
-                item.isEnabled = true;
-                enabledCount++;
-            }
-            else{
-                item.isEnabled = false;
-            }
-            return item;
-        });
-        this.setState({updateFilterResultText : enabledCount});
+        let filteredList = [];
+        if(key === 'all'){
+            filteredList = enableAllMovieCards(array)
+            enabledCount = filteredList.length;
+        }
+        else{
+            filteredList = array.map(item => {
+       
+                if (item.description.toLowerCase().includes(key)) {
+                    item.isEnabled = true;
+                    enabledCount++;
+                }
+                else {
+                    item.isEnabled = false;
+                }
+                return item;
+            });
+        }
+        setUpdateFilterResultText(enabledCount);
         return filteredList;
     }
 
-    onMovieDetailsSearch(){
-        this.setState({isMovieDetailsVisible: false})
+    function onMovieDetailsSearch() {
+        setMovieDetailsVisible(false);
     }
 
-    async componentDidMount() {
-        let list = await this.fetchMovieListing();
-        let stateList = this.sortByKey(list, this.state.sortOption);
-        this.setState({ updateFilterResultText: stateList.length, movieList: stateList })
-    }
-
-    async fetchMovieListing() {
+    async function fetchMovieListing() {
         let response = await ProcessGetRequest();
         if (response.status === 200) {
             return response.data;
         }
         else {
-            this.setState({ isError: true })
+            setError(true);
         }
     }
 
-    render() {
-        return (
-            <>
-                {(this.state.isMovieDetailsVisible) ?
+    const initRoulette = useCallback(async () => {
+        let list = await fetchMovieListing();
+        let stateList = sortByKey(list, sortOption);
+        setUpdateFilterResultText(stateList.length);
+        setMovieList(stateList);
+    });
+
+    useEffect(() => {
+        initRoulette();
+    }, []);
+
+    return (
+        <>
+            {(isMovieDetailsVisible) ?
                 <div className='parent-header-movie-details-properties'>
-                <div className='parent-header-layer'>
-                <MovieDetails
-                    processMovieDetailsInfo={this.state.processMovieDetailsInfo}
-                    onMovieDetailsSearch={this.onMovieDetailsSearch.bind(this)}
-                />
-                </div>
+                    <div className='parent-header-layer'>
+                        <MovieDetails
+                            processMovieDetailsInfo={processMovieDetailsInfo}
+                            onMovieDetailsSearch={onMovieDetailsSearch.bind(this)}
+                        />
+                    </div>
                 </div> :
                 <div className='parent-header-properties'>
                     <Header
-                        isAddModalVisible={this.state.isAddModalVisible}
-                        onAddAction={this.onAddAction.bind(this)}
+                        isAddModalVisible={isAddModalVisible}
+                        onAddAction={onAddAction.bind(this)}
                     />
                 </div>
-                }
+            }
 
-                <div className='parent-background-properties'>
-                    <SortFilterListing onHandleSelect={this.onHandleSelect.bind(this)} 
-                        onFilterCategoryClicked={this.onFilterCategoryClicked.bind(this)} 
-                        updateFilterResultText={this.state.updateFilterResultText}
+            <div className='parent-background-properties'>
+                <SortFilterListing onHandleSelect={onHandleSelect.bind(this)}
+                    onFilterCategoryClicked={onFilterCategoryClicked.bind(this)}
+                    updateFilterResultText={updateFilterResultText}
+                />
+                <ErrorBoundary
+                    isError={isError}>
+                    <React.Suspense
+                        fallback={<p className="parent-general-message">Loading titles...</p>}>
+                        <MoviesList
+                            listing={movieList}
+                            onEditAction={onEditAction.bind(this)}
+                            onDeleteAction={onDeleteAction.bind(this)}
+                            onShowMovieDetailsAction={onShowMovieDetailsAction.bind(this)}
                         />
-                    <ErrorBoundary
-                        isError={this.state.isError}>
-                        <React.Suspense
-                            fallback={<p className="parent-general-message">Loading titles...</p>}>
-                            <MoviesList
-                                listing={this.state.movieList}
-                                onEditAction={this.onEditAction.bind(this)}
-                                onDeleteAction={this.onDeleteAction.bind(this)}
-                                onShowMovieDetailsAction={this.onShowMovieDetailsAction.bind(this)}
-                            />
-                        </React.Suspense>
-                    </ErrorBoundary>
-                </div>
-                <div className='parent-footer-properties'>
-                    <Footer />
-                </div>
-                {(this.state.isEditModalVisible) ?
-                    <AddEditMovie
-                        processEditMovieField={this.state.processEditMovieField}
-                        onCloseAction={this.onCloseAction.bind(this)}
-                        onSaveAction={this.onSaveAction.bind(this)}
-                    /> : null}
-                {(this.state.isAddModalVisible) ?
-                    <AddEditMovie
-                        onCloseAction={this.onCloseAction.bind(this)}
-                        onSubmitAction={this.onSubmitAction.bind(this)}
-                    /> : null}
-                {(this.state.isDeleteModalVisible) ?
-                    <DeleteMovie
-                        processDeleteMovieField={this.state.processDeleteMovieField}
-                        onCloseAction={this.onCloseAction.bind(this)}
-                        onConfirmAction={this.onConfirmAction.bind(this)}
-                    /> : null}
-            </>
-        )
-    }
+                    </React.Suspense>
+                </ErrorBoundary>
+            </div>
+            <div className='parent-footer-properties'>
+                <Footer />
+            </div>
+            {(isEditModalVisible) ?
+                <AddEditMovie
+                    processEditMovieField={processEditMovieField}
+                    onCloseAction={onCloseAction.bind(this)}
+                    onSaveAction={onSaveAction.bind(this)}
+                /> : null}
+            {(isAddModalVisible) ?
+                <AddEditMovie
+                    onCloseAction={onCloseAction.bind(this)}
+                    onSubmitAction={onSubmitAction.bind(this)}
+                /> : null}
+            {(isDeleteModalVisible) ?
+                <DeleteMovie
+                    processDeleteMovieField={processDeleteMovieField}
+                    onCloseAction={onCloseAction.bind(this)}
+                    onConfirmAction={onConfirmAction.bind(this)}
+                /> : null}
+        </>
+    )
 }
-
-export default RouletteMain;
