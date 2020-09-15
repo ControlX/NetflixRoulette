@@ -3,6 +3,7 @@
     float: left;
     width: 350px;
     height: 550px;
+    position: relative;
 }
 .gallery:hover .dots-properties{
     display: block;

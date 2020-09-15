@@ -8,6 +8,7 @@ export default function MoviesList(props){
     return (
         <>
         {listing.map((movie) => (
+            (movie.isEnabled) ?
             <div className='gallery' key={movie.id}>
             <MovieCard
                 id={movie.id}
@@ -20,7 +21,7 @@ export default function MoviesList(props){
                 onEditAction={props.onEditAction}
                 onDeleteAction={props.onDeleteAction}
             />
-            </div>
+            </div> : null
         ))}
         </>
     )

@@ -18,6 +18,7 @@
     overflow: hidden;
     position: relative;
     height: 400px;
+    background-image: url("../../resources/header_background.png");
 }
 
 .parent-footer-properties {

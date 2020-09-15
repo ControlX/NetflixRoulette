@@ -5,7 +5,7 @@ import ErrorBoundary from '../ErrorBoundary'
 import { ProcessGetRequest } from '../../utils/RestUtils'
 import AddEditMovie from '../AddEditMovie'
 import DeleteMovie from '../DeleteMovie'
-import SortListing from '../SortListing'
+import SortFilterListing from '../SortFilterListing'
 import "regenerator-runtime"
 const MoviesList = React.lazy(() => import("../MoviesList"));
 
@@ -14,9 +14,7 @@ class RouletteMain extends Component {
         super(props);
         this.state = {
             movieList: [],
-            filterList: [],
             sortOption: "year",
-            filterOption: "all",
             isError: false,
             isAddModalVisible: false,
             isEditModalVisible: false,
@@ -48,11 +46,12 @@ class RouletteMain extends Component {
     }
 
     onSubmitAction(item) {
-        let stateList = this.state.movieList;
+        let stateList = [...this.state.movieList];
         let uniqueId = stateList.length + 1;
         item.id = uniqueId;
+        item.isEnabled = true;
         stateList.push(item);
-        this.setState({ movieList: [...this.state.movieList, item] })
+        this.setState({ updateFilterResultText : stateList.length, movieList: stateList })
         this.onCloseAction();
     }
 
@@ -70,23 +69,19 @@ class RouletteMain extends Component {
         this.onCloseAction();
     }
 
-    async onSortCategoryClicked(event){
+    async onFilterCategoryClicked(event){
         let type = event.target.value;
         switch(type){
             case "all":
-                let list = await this.fetchMovieListing();
+                let list = [...this.state.movieList];
+                list = this.enableAllMovieCards(list);
                 let stateList = this.sortByKey(list, this.state.sortOption);
-                this.setState({ filterOption: type, updateFilterResultText : stateList.length, movieList: stateList })
+                this.setState({ updateFilterResultText : stateList.length, movieList: stateList })
                 break;
-            case "documentary":
-            case "comedy":
-            case "horror":
-            case "crime":
-                let initialList = await this.fetchMovieListing();
-                this.setState({ movieList: initialList })
+            default:
                 let newList = [...this.state.movieList];
                 let newStateList = this.filterByGenreType(newList, type);
-                this.setState({ filterOption: type, updateFilterResultText : newStateList.length, movieList: newStateList })
+                this.setState({movieList: newStateList })
                 break;
         }
     }
@@ -104,8 +99,27 @@ class RouletteMain extends Component {
         });
     }
 
+    enableAllMovieCards(list){
+        return list.map(item => {
+            item.isEnabled = true;
+            return item;
+        })
+    }
+
     filterByGenreType(array, key) {
-        return array.filter(item => item.description.toLowerCase().includes(key))
+        let enabledCount = 0;
+        let filteredList = array.map(item => {
+            if(item.description.toLowerCase().includes(key)){
+                item.isEnabled = true;
+                enabledCount++;
+            }
+            else{
+                item.isEnabled = false;
+            }
+            return item;
+        });
+        this.setState({updateFilterResultText : enabledCount});
+        return filteredList;
     }
 
     async componentDidMount() {
@@ -135,10 +149,9 @@ class RouletteMain extends Component {
                 </div>
 
                 <div className='parent-background-properties'>
-                    <SortListing onHandleSelect={this.onHandleSelect.bind(this)} 
-                        onSortCategoryClicked={this.onSortCategoryClicked.bind(this)} 
+                    <SortFilterListing onHandleSelect={this.onHandleSelect.bind(this)} 
+                        onFilterCategoryClicked={this.onFilterCategoryClicked.bind(this)} 
                         updateFilterResultText={this.state.updateFilterResultText}
-                        filterOption={this.state.filterOption}
                         />
                     <ErrorBoundary
                         isError={this.state.isError}>
