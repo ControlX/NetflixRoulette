@@ -17,7 +17,7 @@ export default function useFetch(url, options) {
                 //   const res = await fetch(url, options);
                 //   const json = await res.json();
                 let response = localStorage.getItem('movieTitles');
-                if (response === undefined || response.length === 0) {
+                if (response === null || response === undefined || response.length === 0) {
                     response = await ProcessGetRequest();
                     if (response.status === 200) {
                         localStorage.setItem('movieTitles', response)
