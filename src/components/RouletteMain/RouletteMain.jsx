@@ -179,21 +179,21 @@ export default function RouletteMain() {
                     <div className='parent-header-layer'>
                         <MovieDetails
                             movieDetailSelection={movieDetailSelection}
-                            onMovieDetailsSearch={onMovieDetailsSearch.bind(this)}
+                            onMovieDetailsSearch={onMovieDetailsSearch}
                         />
                     </div>
                 </div> :
                 <div className='parent-header-properties'>
                     <Header
                         isAddModalVisible={isAddModalVisible}
-                        onAddAction={onAddAction.bind(this)}
+                        onAddAction={onAddAction}
                     />
                 </div>
             }
 
             <div className='parent-background-properties'>
-                <SortFilterListing onHandleSelect={onHandleSelect.bind(this)}
-                    onFilterCategoryClicked={onFilterCategoryClicked.bind(this)}
+                <SortFilterListing onHandleSelect={onHandleSelect}
+                    onFilterCategoryClicked={onFilterCategoryClicked}
                     updateFilterResultText={updateFilterResultText}
                 />
                 <ErrorBoundary
@@ -202,9 +202,9 @@ export default function RouletteMain() {
                         fallback={<p className="parent-general-message">Loading titles...</p>}>
                         <MoviesList
                             listing={movieList}
-                            onEditAction={onEditAction.bind(this)}
-                            onDeleteAction={onDeleteAction.bind(this)}
-                            onShowMovieDetailsAction={onShowMovieDetailsAction.bind(this)}
+                            onEditAction={onEditAction}
+                            onDeleteAction={onDeleteAction}
+                            onShowMovieDetailsAction={onShowMovieDetailsAction}
                         />
                     </React.Suspense>
                 </ErrorBoundary>
@@ -215,19 +215,19 @@ export default function RouletteMain() {
             {(isEditModalVisible) ?
                 <AddEditMovie
                     editMovieSelection={editMovieSelection}
-                    onCloseAction={onCloseAction.bind(this)}
-                    onSaveAction={onSaveAction.bind(this)}
+                    onCloseAction={onCloseAction}
+                    onSaveAction={onSaveAction}
                 /> : null}
             {(isAddModalVisible) ?
                 <AddEditMovie
-                    onCloseAction={onCloseAction.bind(this)}
-                    onSubmitAction={onSubmitAction.bind(this)}
+                    onCloseAction={onCloseAction}
+                    onSubmitAction={onSubmitAction}
                 /> : null}
             {(isDeleteModalVisible) ?
                 <DeleteMovie
                     deleteMovieSelection={deleteMovieSelection}
-                    onCloseAction={onCloseAction.bind(this)}
-                    onConfirmAction={onConfirmAction.bind(this)}
+                    onCloseAction={onCloseAction}
+                    onConfirmAction={onConfirmAction}
                 /> : null}
         </>
     )
