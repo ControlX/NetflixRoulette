@@ -10,7 +10,7 @@ import MovieDetails from '../MovieDetails'
 import "regenerator-runtime"
 const MoviesList = React.lazy(() => import("../MoviesList"));
 
-export default function RouletteMain(props) {
+export default function RouletteMain() {
     const [isError, setError] = useState(false);
     const [movieList, setMovieList] = useState([]);
     const [sortOption, setSortOption] = useState("year");
