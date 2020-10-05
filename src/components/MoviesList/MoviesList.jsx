@@ -8,7 +8,6 @@ export default function MoviesList(props){
     return (
         <>
         {movieList.map((movie) => (
-            (movie.isEnabled) ?
             <div className='gallery' key={movie.id}>
             <MovieCard
                 id={movie.id}
@@ -22,7 +21,7 @@ export default function MoviesList(props){
                 onDeleteAction={props.onDeleteAction}
                 onShowMovieDetailsAction={props.onShowMovieDetailsAction}
             />
-            </div> : null
+            </div>
         ))}
         </>
     )

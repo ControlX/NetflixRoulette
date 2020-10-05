@@ -13,6 +13,7 @@ const MoviesList = React.lazy(() => import("../MoviesList"));
 export default function RouletteMain() {
     const [isError, setError] = useState(false);
     const [movieList, setMovieList] = useState([]);
+    const [visibleMovies, setVisibleMovies] = useState([]);
     const [sortOption, setSortOption] = useState("year");
     const [filterOption, setFilterOption] = useState("all");
     const [isAddModalVisible, setAddModalVisible] = useState(false);
@@ -22,7 +23,6 @@ export default function RouletteMain() {
     const [editMovieSelection, setEditMovieSelection] = useState({});
     const [deleteMovieSelection, setDeleteMovieSelection] = useState({});
     const [movieDetailSelection, setMovieDetailSelection] = useState({});
-    const [displayedMoviesCount, setDisplayedMoviesCount] = useState(0);
 
     function onAddAction() {
         setAddModalVisible(true);
@@ -53,26 +53,25 @@ export default function RouletteMain() {
         let stateList = [...movieList];
         let uniqueId = stateList.length + 1;
         item.id = uniqueId;
-        item.isEnabled = true;
         stateList.push(item);
-        let newStateList = filterByGenreType(stateList, filterOption);
-        setMovieList(newStateList);
+        setMovieList(stateList)
+        filterMovieVisibility(stateList);
         onCloseAction();
     }
 
     function onEditMovieSaveAction(item) {
         let stateList = [...movieList];
         stateList.forEach((obj, i) => { if (obj.id === item.id) { stateList[i] = item } });
-        let newStateList = filterByGenreType(stateList, filterOption);
-        setMovieList(newStateList);
+        setMovieList(stateList)
+        filterMovieVisibility(stateList);
         onCloseAction();
     }
 
     function onDeleteMovieConfirmAction(item) {
         let stateList = [...movieList];
         let modList = stateList.filter((obj) => obj.id !== item.id);
-        let newStateList = filterByGenreType(modList, filterOption);
-        setMovieList(newStateList);
+        setMovieList(modList)
+        filterMovieVisibility(modList);
         onCloseAction();
     }
 
@@ -84,66 +83,30 @@ export default function RouletteMain() {
         window.scrollTo(0, 0);
     }
 
-    function onFilterCategoryClicked(category) {
-        switch (category) {
-            case "all":
-                let list = [...movieList];
-                list = enableAllMovieCards(list);
-                let stateList = sortByKey(list, sortOption);
-                setDisplayedMoviesCount(stateList.length);
-                setMovieList(stateList);
-                break;
-            default:
-                let newList = [...movieList];
-                let newStateList = filterByGenreType(newList, category);
-                setMovieList(newStateList);
-                break;
-        }
+    function onFilterCategoryClicked(category) {       
+        let stateList = sortByKey([...movieList]);
         setFilterOption(category);
+        filterMovieVisibility(stateList, category);
     }
 
-    function onHandleSelectedOption(selectedOption) {
+    function onHandleSelectedSortOption(selectedOption) {
         setSortOption(selectedOption);
-        let stateList = sortByKey(movieList, selectedOption);
-        setMovieList(stateList);
+        let stateList = sortByKey(visibleMovies, selectedOption);
+        filterMovieVisibility(stateList);
     }
 
-    function sortByKey(array, key) {
+    function sortByKey(array, key = sortOption) {
         return array.sort(function (a, b) {
             var x = a[key]; var y = b[key];
             return ((x < y) ? -1 : ((x > y) ? 1 : 0));
         });
     }
 
-    function enableAllMovieCards(list) {
-        return list.map(item => {
-            item.isEnabled = true;
-            return item;
-        })
-    }
-
-    function filterByGenreType(array, key) {
-        let enabledCount = 0;
-        let filteredList = [];
-        if(key === 'all'){
-            filteredList = enableAllMovieCards(array)
-            enabledCount = filteredList.length;
-        }
-        else{
-            filteredList = array.map(item => {
-       
-                if (item.description.toLowerCase().includes(key)) {
-                    item.isEnabled = true;
-                    enabledCount++;
-                }
-                else {
-                    item.isEnabled = false;
-                }
-                return item;
-            });
-        }
-        setDisplayedMoviesCount(enabledCount);
-        return filteredList;
+    function filterMovieVisibility(array, key = filterOption) {
+        let initialList = [];
+        (movieList.length === 0) ? initialList = array : initialList = movieList; //Adding useState(setMovieList) in useCallback hook is not updating state immediately, hence required for initial call. Need to verify with Alex.
+        const filteredList = (key === 'all') ? initialList : array.filter(item => item.description.toLowerCase().includes(key));
+        setVisibleMovies(filteredList);
     }
 
     function onMovieDetailsSearch() {
@@ -162,9 +125,9 @@ export default function RouletteMain() {
 
     const initRoulette = useCallback(async () => {
         let list = await fetchMovieListing();
-        let stateList = sortByKey(list, sortOption);
-        setDisplayedMoviesCount(stateList.length);
+        let stateList = sortByKey(list);
         setMovieList(stateList);
+        filterMovieVisibility(stateList)
     });
 
     useEffect(() => {
@@ -191,9 +154,9 @@ export default function RouletteMain() {
             }
 
             <div className='parent-background-properties'>
-                <SortFilterListing onHandleSelectedOption={onHandleSelectedOption}
+                <SortFilterListing onHandleSelectedSortOption={onHandleSelectedSortOption}
                     onFilterCategoryClicked={onFilterCategoryClicked}
-                    displayedMoviesCount={displayedMoviesCount}
+                    displayedMoviesCount={visibleMovies.length}
                     selectedFilter = {filterOption}
                 />
                 <ErrorBoundary
@@ -201,7 +164,7 @@ export default function RouletteMain() {
                     <React.Suspense
                         fallback={<p className="parent-general-message">Loading titles...</p>}>
                         <MoviesList
-                            movieList={movieList}
+                            movieList={visibleMovies}
                             onEditAction={onEditAction}
                             onDeleteAction={onDeleteAction}
                             onShowMovieDetailsAction={onShowMovieDetailsAction}
