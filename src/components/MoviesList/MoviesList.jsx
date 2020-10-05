@@ -29,5 +29,5 @@ export default function MoviesList(props){
 }
 
 MoviesList.propTypes = {
-    listing: PropTypes.array.isRequired
+    movieList: PropTypes.array.isRequired
 }

@@ -49,9 +49,10 @@ export default function RouletteMain() {
         setMovieDetailsVisible(false);
     }
 
-    function onSubmitAction(item) {
+    function onAddMovieSubmitAction(item) {
         let stateList = [...movieList];
         let uniqueId = stateList.length + 1;
+        console.log("==>", uniqueId)
         item.id = uniqueId;
         item.isEnabled = true;
         stateList.push(item);
@@ -60,7 +61,7 @@ export default function RouletteMain() {
         onCloseAction();
     }
 
-    function onSaveAction(item) {
+    function onEditMovieSaveAction(item) {
         let stateList = [...movieList];
         stateList.forEach((obj, i) => { if (obj.id === item.id) { stateList[i] = item } });
         let newStateList = filterByGenreType(stateList, filterOption);
@@ -68,7 +69,7 @@ export default function RouletteMain() {
         onCloseAction();
     }
 
-    function onConfirmAction(item) {
+    function onDeleteMovieConfirmAction(item) {
         let stateList = [...movieList];
         let modList = stateList.filter((obj) => obj.id !== item.id);
         let newStateList = filterByGenreType(modList, filterOption);
@@ -77,6 +78,7 @@ export default function RouletteMain() {
     }
 
     function onShowMovieDetailsAction(id) {
+        console.log("===>", id);
         let stateList = [...movieList];
         let listObject = stateList.find(obj => obj.id === id);
         setMovieDetailSelection(listObject);
@@ -102,7 +104,7 @@ export default function RouletteMain() {
         setFilterOption(category);
     }
 
-    function onHandleSelect(selectedOption) {
+    function onHandleSelectedOption(selectedOption) {
         setSortOption(selectedOption);
         let stateList = sortByKey(movieList, selectedOption);
         setMovieList(stateList);
@@ -191,7 +193,7 @@ export default function RouletteMain() {
             }
 
             <div className='parent-background-properties'>
-                <SortFilterListing onHandleSelect={onHandleSelect}
+                <SortFilterListing onHandleSelectedOption={onHandleSelectedOption}
                     onFilterCategoryClicked={onFilterCategoryClicked}
                     displayedMoviesCount={displayedMoviesCount}
                     selectedFilter = {filterOption}
@@ -216,18 +218,18 @@ export default function RouletteMain() {
                 <AddEditMovie
                     editMovieSelection={editMovieSelection}
                     onCloseAction={onCloseAction}
-                    onSaveAction={onSaveAction}
+                    onEditMovieSaveAction={onEditMovieSaveAction}
                 /> : null}
             {(isAddModalVisible) ?
                 <AddEditMovie
                     onCloseAction={onCloseAction}
-                    onSubmitAction={onSubmitAction}
+                    onAddMovieSubmitAction={onAddMovieSubmitAction}
                 /> : null}
             {(isDeleteModalVisible) ?
                 <DeleteMovie
                     deleteMovieSelection={deleteMovieSelection}
                     onCloseAction={onCloseAction}
-                    onConfirmAction={onConfirmAction}
+                    onDeleteMovieConfirmAction={onDeleteMovieConfirmAction}
                 /> : null}
         </>
     )

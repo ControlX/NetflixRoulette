@@ -78,7 +78,7 @@ export default function AddEditMovie(props) {
                         </div>
                         <div className="modal-footer">
                             <button className="modal-btn-reset" onClick={() => resetFields()}>RESET</button>
-                            <button className="modal-btn-submit" onClick={() => props.onSaveAction(addMovieJson)}>SAVE</button>
+                            <button className="modal-btn-submit" onClick={() => props.onEditMovieSaveAction(addMovieJson)}>SAVE</button>
                         </div>
                     </div>
 
@@ -113,7 +113,7 @@ export default function AddEditMovie(props) {
                         </div>
                         <div className="modal-footer">
                             <button className="modal-btn-reset" onClick={() => resetFields()}>RESET</button>
-                            <button className="modal-btn-submit" onClick={() => props.onSubmitAction(addMovieJson)}>SUBMIT</button>
+                            <button className="modal-btn-submit" onClick={() => props.onAddMovieSubmitAction(addMovieJson)}>SUBMIT</button>
                         </div>
                     </div>
 

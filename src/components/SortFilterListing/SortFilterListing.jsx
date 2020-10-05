@@ -17,7 +17,7 @@ export default function SortFilterListing(props) {
             </div>
             <div className="sort-right-div">
                 <label className="parent-sort-label"> SORT BY </label>
-                <select name="movies" id="movies" className="parent-sort-select" onChange={(e) => props.onHandleSelect(e.target.value)}>
+                <select name="movies" id="movies" className="parent-sort-select" onChange={(e) => props.onHandleSelectedOption(e.target.value)}>
                     <option value="year">RELEASE DATE</option>
                     <option value="title">TITLE</option>
                     <option value="description">GENRE</option>
