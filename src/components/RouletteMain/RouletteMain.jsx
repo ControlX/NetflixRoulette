@@ -52,7 +52,6 @@ export default function RouletteMain() {
     function onAddMovieSubmitAction(item) {
         let stateList = [...movieList];
         let uniqueId = stateList.length + 1;
-        console.log("==>", uniqueId)
         item.id = uniqueId;
         item.isEnabled = true;
         stateList.push(item);
@@ -78,7 +77,6 @@ export default function RouletteMain() {
     }
 
     function onShowMovieDetailsAction(id) {
-        console.log("===>", id);
         let stateList = [...movieList];
         let listObject = stateList.find(obj => obj.id === id);
         setMovieDetailSelection(listObject);
