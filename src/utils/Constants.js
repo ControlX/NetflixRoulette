@@ -1,5 +1,9 @@
-export default function LoadMovieJson() {
-    return [
+const FilterCategories = () => {
+    return ["all", "documentary", "comedy", "horror", "crime"];
+}
+
+const MovieJson = () => {
+     return [
         {
             title: 'Pulp Fiction',
             description: 'Action & Adventure',
@@ -167,3 +171,5 @@ export default function LoadMovieJson() {
         }
     ]
 }
+
+export { MovieJson, FilterCategories };

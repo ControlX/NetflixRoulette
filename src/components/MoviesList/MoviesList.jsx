@@ -4,10 +4,10 @@ import PropTypes from 'prop-types'
 import './movies_list.css'
 
 export default function MoviesList(props){
-    const listing = props.listing;
+    const movieList = props.movieList;
     return (
         <>
-        {listing.map((movie) => (
+        {movieList.map((movie) => (
             (movie.isEnabled) ?
             <div className='gallery' key={movie.id}>
             <MovieCard

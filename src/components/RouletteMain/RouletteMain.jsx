@@ -22,7 +22,7 @@ export default function RouletteMain() {
     const [editMovieSelection, setEditMovieSelection] = useState({});
     const [deleteMovieSelection, setDeleteMovieSelection] = useState({});
     const [movieDetailSelection, setMovieDetailSelection] = useState({});
-    const [updateFilterResultText, setUpdateFilterResultText] = useState(0);
+    const [displayedMoviesCount, setDisplayedMoviesCount] = useState(0);
 
     function onAddAction() {
         setAddModalVisible(true);
@@ -84,28 +84,27 @@ export default function RouletteMain() {
         window.scrollTo(0, 0);
     }
 
-    function onFilterCategoryClicked(event) {
-        let type = event.target.value;
-        switch (type) {
+    function onFilterCategoryClicked(category) {
+        switch (category) {
             case "all":
                 let list = [...movieList];
                 list = enableAllMovieCards(list);
                 let stateList = sortByKey(list, sortOption);
-                setUpdateFilterResultText(stateList.length);
+                setDisplayedMoviesCount(stateList.length);
                 setMovieList(stateList);
                 break;
             default:
                 let newList = [...movieList];
-                let newStateList = filterByGenreType(newList, type);
+                let newStateList = filterByGenreType(newList, category);
                 setMovieList(newStateList);
                 break;
         }
-        setFilterOption(type);
+        setFilterOption(category);
     }
 
-    function onHandleSelect(event) {
-        setSortOption(event.target.value);
-        let stateList = sortByKey(movieList, event.target.value);
+    function onHandleSelect(selectedOption) {
+        setSortOption(selectedOption);
+        let stateList = sortByKey(movieList, selectedOption);
         setMovieList(stateList);
     }
 
@@ -143,7 +142,7 @@ export default function RouletteMain() {
                 return item;
             });
         }
-        setUpdateFilterResultText(enabledCount);
+        setDisplayedMoviesCount(enabledCount);
         return filteredList;
     }
 
@@ -164,7 +163,7 @@ export default function RouletteMain() {
     const initRoulette = useCallback(async () => {
         let list = await fetchMovieListing();
         let stateList = sortByKey(list, sortOption);
-        setUpdateFilterResultText(stateList.length);
+        setDisplayedMoviesCount(stateList.length);
         setMovieList(stateList);
     });
 
@@ -194,14 +193,15 @@ export default function RouletteMain() {
             <div className='parent-background-properties'>
                 <SortFilterListing onHandleSelect={onHandleSelect}
                     onFilterCategoryClicked={onFilterCategoryClicked}
-                    updateFilterResultText={updateFilterResultText}
+                    displayedMoviesCount={displayedMoviesCount}
+                    selectedFilter = {filterOption}
                 />
                 <ErrorBoundary
                     isError={isError}>
                     <React.Suspense
                         fallback={<p className="parent-general-message">Loading titles...</p>}>
                         <MoviesList
-                            listing={movieList}
+                            movieList={movieList}
                             onEditAction={onEditAction}
                             onDeleteAction={onDeleteAction}
                             onShowMovieDetailsAction={onShowMovieDetailsAction}

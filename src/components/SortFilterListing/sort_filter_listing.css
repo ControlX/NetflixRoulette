@@ -35,6 +35,7 @@
     border-top: none;
     border-right: none;
     border-bottom: solid 2px #232323;
+    text-transform: capitalize;
 }
 /* .sort-left-button:active,
 .sort-left-button:focus{
@@ -51,6 +52,7 @@
     border-top: none;
     border-right: none;
     border-bottom: solid 2px #F65261;
+    text-transform: capitalize;
 }
 
 .sort-result-number{
