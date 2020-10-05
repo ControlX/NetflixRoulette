@@ -19,9 +19,9 @@ export default function RouletteMain() {
     const [isEditModalVisible, setEditModalVisible] = useState(false);
     const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
     const [isMovieDetailsVisible, setMovieDetailsVisible] = useState(false);
-    const [processEditMovieField, setProcessEditMovieField] = useState({});
-    const [processDeleteMovieField, setProcessDeleteMovieField] = useState({});
-    const [processMovieDetailsInfo, setProcessMovieDetailsInfo] = useState({});
+    const [editMovieSelection, setEditMovieSelection] = useState({});
+    const [deleteMovieSelection, setDeleteMovieSelection] = useState({});
+    const [movieDetailSelection, setMovieDetailSelection] = useState({});
     const [updateFilterResultText, setUpdateFilterResultText] = useState(0);
 
     function onAddAction() {
@@ -31,14 +31,14 @@ export default function RouletteMain() {
     function onEditAction(id) {
         let stateList = [...movieList];
         let listObject = stateList.find(obj => obj.id === id)
-        setProcessEditMovieField(listObject);
+        setEditMovieSelection(listObject);
         setEditModalVisible(true);
     }
 
     function onDeleteAction(id) {
         let stateList = [...movieList];
         let listObject = stateList.find(obj => obj.id === id);
-        setProcessDeleteMovieField(listObject);
+        setDeleteMovieSelection(listObject);
         setDeleteModalVisible(true);
     }
 
@@ -79,7 +79,7 @@ export default function RouletteMain() {
     function onShowMovieDetailsAction(id) {
         let stateList = [...movieList];
         let listObject = stateList.find(obj => obj.id === id);
-        setProcessMovieDetailsInfo(listObject);
+        setMovieDetailSelection(listObject);
         setMovieDetailsVisible(true);
         window.scrollTo(0, 0);
     }
@@ -178,7 +178,7 @@ export default function RouletteMain() {
                 <div className='parent-header-movie-details-properties'>
                     <div className='parent-header-layer'>
                         <MovieDetails
-                            processMovieDetailsInfo={processMovieDetailsInfo}
+                            movieDetailSelection={movieDetailSelection}
                             onMovieDetailsSearch={onMovieDetailsSearch.bind(this)}
                         />
                     </div>
@@ -214,7 +214,7 @@ export default function RouletteMain() {
             </div>
             {(isEditModalVisible) ?
                 <AddEditMovie
-                    processEditMovieField={processEditMovieField}
+                    editMovieSelection={editMovieSelection}
                     onCloseAction={onCloseAction.bind(this)}
                     onSaveAction={onSaveAction.bind(this)}
                 /> : null}
@@ -225,7 +225,7 @@ export default function RouletteMain() {
                 /> : null}
             {(isDeleteModalVisible) ?
                 <DeleteMovie
-                    processDeleteMovieField={processDeleteMovieField}
+                    deleteMovieSelection={deleteMovieSelection}
                     onCloseAction={onCloseAction.bind(this)}
                     onConfirmAction={onConfirmAction.bind(this)}
                 /> : null}

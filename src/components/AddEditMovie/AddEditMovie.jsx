@@ -5,8 +5,8 @@ export default function AddEditMovie(props) {
 
     var addMovieJson = {};
 
-    if (props.processEditMovieField !== undefined) {
-        addMovieJson = props.processEditMovieField;
+    if (props.editMovieSelection !== undefined) {
+        addMovieJson = props.editMovieSelection;
     }
     else {
         addMovieJson.src = "./src/resources/movie_poster2.png" //Temperory to refer to internal asset location
@@ -37,7 +37,7 @@ export default function AddEditMovie(props) {
     }
 
     let resetFields = () => {
-        if (props.processEditMovieField !== undefined) {
+        if (props.editMovieSelection !== undefined) {
             document.getElementById("form-edit-movie").reset()
         }
         else {
@@ -46,7 +46,7 @@ export default function AddEditMovie(props) {
     }
 
     return (
-        (props.processEditMovieField !== undefined) ?
+        (props.editMovieSelection !== undefined) ?
             <>
                 <div id="myModal" className="modal">
 
@@ -61,19 +61,19 @@ export default function AddEditMovie(props) {
                             <br /><br />
                             <form id="form-edit-movie">
                                 <p className="modal-body-titles">MOVIE ID</p>
-                                <input className="modal-body-input-disabled" placeholder="" defaultValue={props.processEditMovieField.id} onChange={(e) => handleTitleChange(e)} disabled={true} />
+                                <input className="modal-body-input-disabled" placeholder="" defaultValue={props.editMovieSelection.id} onChange={(e) => handleTitleChange(e)} disabled={true} />
                                 <p className="modal-body-titles">TITLE</p>
-                                <input className="modal-body-input" placeholder="Movie Title" defaultValue={props.processEditMovieField.title} onChange={(e) => handleTitleChange(e)} />
+                                <input className="modal-body-input" placeholder="Movie Title" defaultValue={props.editMovieSelection.title} onChange={(e) => handleTitleChange(e)} />
                                 <p className="modal-body-titles" >RELEASE DATE</p>
-                                <input className="modal-body-input" placeholder="Select Date" defaultValue={props.processEditMovieField.year} onChange={(e) => handleDateChange(e)} />
+                                <input className="modal-body-input" placeholder="Select Date" defaultValue={props.editMovieSelection.year} onChange={(e) => handleDateChange(e)} />
                                 <p className="modal-body-titles" >MOVIE URL</p>
-                                <input className="modal-body-input" placeholder="Movie URL here" defaultValue={props.processEditMovieField.src} onChange={(e) => handleUrlChange(e)} />
+                                <input className="modal-body-input" placeholder="Movie URL here" defaultValue={props.editMovieSelection.src} onChange={(e) => handleUrlChange(e)} />
                                 <p className="modal-body-titles" >GENRE</p>
-                                <input className="modal-body-input" placeholder="Select Genre" defaultValue={props.processEditMovieField.description} onChange={(e) => handleGenreChange(e)} />
+                                <input className="modal-body-input" placeholder="Select Genre" defaultValue={props.editMovieSelection.description} onChange={(e) => handleGenreChange(e)} />
                                 <p className="modal-body-titles" >OVERVIEW</p>
-                                <input className="modal-body-input" placeholder="Overview here" defaultValue={props.processEditMovieField.overview} onChange={(e) => handleOverviewChange(e)} />
+                                <input className="modal-body-input" placeholder="Overview here" defaultValue={props.editMovieSelection.overview} onChange={(e) => handleOverviewChange(e)} />
                                 <p className="modal-body-titles" >RUNTIME</p>
-                                <input className="modal-body-input" placeholder="Runtime here" defaultValue={props.processEditMovieField.runtime} onChange={(e) => handleRuntimeChange(e)} />
+                                <input className="modal-body-input" placeholder="Runtime here" defaultValue={props.editMovieSelection.runtime} onChange={(e) => handleRuntimeChange(e)} />
                             </form>
                         </div>
                         <div className="modal-footer">
