@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { ProcessGetRequest } from '../../utils/RestUtils'
 
 /**
@@ -7,28 +7,29 @@ import { ProcessGetRequest } from '../../utils/RestUtils'
  * @param {*} options For future implementation
  */
 export default function useFetch(url, options) {
-    const [response, setResponse] = React.useState(null);
+    const [res, setResponse] = React.useState(null);
     const [error, setError] = React.useState(null);
-    React.useEffect(() => {
+    useEffect(() => {
         const fetchData = async () => {
             // setLoading(true);
             try {
                 // Will open this for future implementations
                 //   const res = await fetch(url, options);
                 //   const json = await res.json();
-                let response = localStorage.getItem('movieTitles');
-                if (response === null || response === undefined || response.length === 0) {
-                    response = await ProcessGetRequest();
-                    if (response.status === 200) {
-                        localStorage.setItem('movieTitles', response)
-                        setResponse(response.data);
+                let res = localStorage.getItem('movie_titles');
+                if (res === null || res === undefined || res.length === 0) {
+                    res = await ProcessGetRequest();
+                    if (res.status === 200) {
+                        localStorage.setItem('movie_titles', JSON.stringify(response));
+                        setResponse(res.data);
                     }
                     else {
                         setError(true);
                     }
                 }
                 else{
-                    setResponse(response.data);
+                    let parsed_response = JSON.parse(res);
+                    setResponse(parsed_response.data);
                 }
             } catch (error) {
                 setError(error);
@@ -37,5 +38,5 @@ export default function useFetch(url, options) {
         }
         fetchData();
     }, []);
-    return { response, error };
+    return { res, error };
 };

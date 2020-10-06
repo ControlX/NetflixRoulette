@@ -7,6 +7,7 @@ import AddEditMovie from '../AddEditMovie'
 import DeleteMovie from '../DeleteMovie'
 import SortFilterListing from '../SortFilterListing'
 import MovieDetails from '../MovieDetails'
+import FetchMovies from '../CustomHooks'
 import "regenerator-runtime"
 const MoviesList = React.lazy(() => import("../MoviesList"));
 
@@ -38,6 +39,7 @@ export default function RouletteMain() {
     function onDeleteAction(id) {
         let stateList = [...movieList];
         let listObject = stateList.find(obj => obj.id === id);
+        console.log("--", listObject)
         setDeleteMovieSelection(listObject);
         setDeleteModalVisible(true);
     }
@@ -69,10 +71,14 @@ export default function RouletteMain() {
 
     function onDeleteMovieConfirmAction(item) {
         let stateList = [...movieList];
-        let modList = stateList.filter((obj) => obj.id !== item.id);
-        setMovieList(modList)
-        filterMovieVisibility(modList);
-        onCloseAction();
+        stateList = stateList.filter((obj) => obj.id !== item.id);
+        setMovieList(stateList);
+        setMovieList((state) => {
+            console.log(state);
+            filterMovieVisibility(state);
+            onCloseAction();
+            return state;
+          }); 
     }
 
     function onShowMovieDetailsAction(id) {
@@ -103,36 +109,38 @@ export default function RouletteMain() {
     }
 
     function filterMovieVisibility(array, key = filterOption) {
+        console.log("==key ", key)
+        console.log("==array ", array)
+        console.log("==movieList ", movieList)
         let initialList = [];
-        (movieList.length === 0) ? initialList = array : initialList = movieList; //Adding useState(setMovieList) in useCallback hook is not updating state immediately, hence required for initial call. Need to verify with Alex.
-        const filteredList = (key === 'all') ? initialList : array.filter(item => item.description.toLowerCase().includes(key));
-        setVisibleMovies(filteredList);
+        (movieList.length === 0) ? initialList = array : initialList = [...movieList]; //hack as movieList is empty initially always. Need to check and remove this.
+        let filteredList = (key === 'all') ? initialList : array.filter(item => item.description.toLowerCase().includes(key));
+        console.log("==filteredList ", filteredList)
+        setVisibleMovies([...filteredList]);
     }
 
     function onMovieDetailsSearch() {
         setMovieDetailsVisible(false);
     }
 
-    async function fetchMovieListing() {
-        let response = await ProcessGetRequest();
-        if (response.status === 200) {
-            return response.data;
+    let response = FetchMovies();
+    useEffect(() => {        
+        let movieData = response.res;
+        if(movieData != null){
+            let list = movieData;
+            list = sortByKey(list);
+            setMovieList(list);
+            //BUGS:
+            //1) Adding setState(setMovieList) in useEffect is not updating state immediately, hence required for initial call. Need to verify with Alex.
+            //2) On deleting a movie, movieList is not updating. I think it is related to useEffect hook somehow.
+            setMovieList((state) => {
+                //movieList remains empty here
+                filterMovieVisibility(state);
+                return state;
+            }); 
         }
-        else {
-            setError(true);
-        }
-    }
-
-    const initRoulette = useCallback(async () => {
-        let list = await fetchMovieListing();
-        let stateList = sortByKey(list);
-        setMovieList(stateList);
-        filterMovieVisibility(stateList)
-    });
-
-    useEffect(() => {
-        initRoulette();
-    }, []);
+        console.log(response);
+    }, [response.res]);
 
     return (
         <>
@@ -194,4 +202,4 @@ export default function RouletteMain() {
                 /> : null}
         </>
     )
-}
+}//useMemo, useCallback
