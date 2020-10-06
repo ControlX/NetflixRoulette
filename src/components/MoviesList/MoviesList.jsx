@@ -4,10 +4,10 @@ import PropTypes from 'prop-types'
 import './movies_list.css'
 
 export default function MoviesList(props){
-    const listing = props.listing;
+    const movieList = props.movieList;
     return (
         <>
-        {listing.map((movie) => (
+        {movieList.map((movie) => (
             <div className='gallery' key={movie.id}>
             <MovieCard
                 id={movie.id}
@@ -19,6 +19,7 @@ export default function MoviesList(props){
                 runtime={movie.runtime}
                 onEditAction={props.onEditAction}
                 onDeleteAction={props.onDeleteAction}
+                onShowMovieDetailsAction={props.onShowMovieDetailsAction}
             />
             </div>
         ))}
@@ -27,5 +28,5 @@ export default function MoviesList(props){
 }
 
 MoviesList.propTypes = {
-    listing: PropTypes.array.isRequired
+    movieList: PropTypes.array.isRequired
 }

@@ -19,7 +19,7 @@ export default function DeleteMovie(props){
               <label className="modal-body-lbl-properties">Are you sure you want to delete this movie?</label>
               </div>
               <div className="modal-footer">
-                <button className="modal-btn-submit" onClick={()=> props.onConfirmAction(props.processDeleteMovieField)}>CONFIRM</button>
+                <button className="modal-btn-submit" onClick={()=> props.onDeleteMovieConfirmAction(props.deleteMovieSelection)}>CONFIRM</button>
               </div>
             </div>
     

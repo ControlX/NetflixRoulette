@@ -1,6 +1,10 @@
 .gallery {
-    margin: 5% 2% 2% 6%;
+    margin: 9% 0% 0% 1%;
     float: left;
     width: 350px;
     height: 550px;
+    position: relative;
+}
+.gallery:hover .dots-properties{
+    display: block;
 }

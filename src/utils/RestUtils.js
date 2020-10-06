@@ -1,9 +1,9 @@
-import LoadMovieJson from './Constants'
+import  { MovieJson } from './Constants'
 
 export function ProcessGetRequest() { 
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            const MovieList = LoadMovieJson();
+            const MovieList = MovieJson();
             let response = {};
             if(MovieList !== undefined){
                 response.data = MovieList;

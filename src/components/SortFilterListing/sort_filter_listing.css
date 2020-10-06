@@ -1,0 +1,65 @@
+.parent-sort-div{
+    position: absolute;
+    width: 95%;
+}
+
+.sort-left-div{
+    float: left;
+    width: 50%;
+    margin-left: 2%;
+}
+
+.sort-right-div{
+    float: right;
+}
+
+.parent-sort-select{
+    background-color: #232323;
+    color: #F65261;
+    padding: 10px 20px;
+}
+
+.parent-sort-label{
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.219);
+    margin-right: 20px;
+}
+
+.sort-left-button{
+    padding: 10px 20px;
+    background-color: #232323;
+    color: white;
+    font-size: 18px;
+    outline: none;
+    border-left: none;
+    border-top: none;
+    border-right: none;
+    border-bottom: solid 2px #232323;
+    text-transform: capitalize;
+}
+/* .sort-left-button:active,
+.sort-left-button:focus{
+    border-bottom: solid 2px #F65261;
+} */
+
+.sort-left-button-selected{
+    padding: 10px 20px;
+    background-color: #232323;
+    color: white;
+    font-size: 18px;
+    outline: none;
+    border-left: none;
+    border-top: none;
+    border-right: none;
+    border-bottom: solid 2px #F65261;
+    text-transform: capitalize;
+}
+
+.sort-result-number{
+    position: absolute;
+    float: left;
+    margin-top: 50px;
+    margin-left: 2%;
+    color: white;
+    font-size: 24px;
+}

@@ -33,6 +33,7 @@
     text-align:center;
     position: relative;
     display: inline-block;
+    cursor: pointer;
 }
 
 .card-text-properties {

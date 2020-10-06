@@ -1,148 +1,201 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Header from '../Header'
 import Footer from '../Footer'
 import ErrorBoundary from '../ErrorBoundary'
 import { ProcessGetRequest } from '../../utils/RestUtils'
 import AddEditMovie from '../AddEditMovie'
 import DeleteMovie from '../DeleteMovie'
-import SortListing from '../SortListing'
+import SortFilterListing from '../SortFilterListing'
+import MovieDetails from '../MovieDetails'
+import FetchMovies from '../CustomHooks'
 import "regenerator-runtime"
 const MoviesList = React.lazy(() => import("../MoviesList"));
 
-class RouletteMain extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            movieList: [],
-            sortOption: "year", 
-            isError: false,
-            isAddModalVisible: false,
-            isEditModalVisible: false,
-            isDeleteModalVisible: false,
-            processEditMovieField: {},
-            processDeleteMovieField: {}
-        }
+export default function RouletteMain() {
+    const [isError, setError] = useState(false);
+    const [movieList, setMovieList] = useState([]);
+    const [visibleMovies, setVisibleMovies] = useState([]);
+    const [sortOption, setSortOption] = useState("year");
+    const [filterOption, setFilterOption] = useState("all");
+    const [isAddModalVisible, setAddModalVisible] = useState(false);
+    const [isEditModalVisible, setEditModalVisible] = useState(false);
+    const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
+    const [isMovieDetailsVisible, setMovieDetailsVisible] = useState(false);
+    const [editMovieSelection, setEditMovieSelection] = useState({});
+    const [deleteMovieSelection, setDeleteMovieSelection] = useState({});
+    const [movieDetailSelection, setMovieDetailSelection] = useState({});
+
+    function onAddAction() {
+        setAddModalVisible(true);
     }
 
-    onAddAction() {
-        this.setState({ isAddModalVisible: true })
-    }
-
-    onEditAction(id) {
-        let stateList = this.state.movieList;
+    function onEditAction(id) {
+        let stateList = [...movieList];
         let listObject = stateList.find(obj => obj.id === id)
-        this.setState({ processEditMovieField: listObject, isEditModalVisible: true })
+        setEditMovieSelection(listObject);
+        setEditModalVisible(true);
     }
 
-    onDeleteAction(id) {
-        let stateList = this.state.movieList;
+    function onDeleteAction(id) {
+        let stateList = [...movieList];
         let listObject = stateList.find(obj => obj.id === id);
-        this.setState({ processDeleteMovieField: listObject, isDeleteModalVisible: true })
+        console.log("--", listObject)
+        setDeleteMovieSelection(listObject);
+        setDeleteModalVisible(true);
     }
 
-    onCloseAction() {
-        this.setState({ isAddModalVisible: false, isEditModalVisible: false, isDeleteModalVisible: false })
+    function onCloseAction() {
+        setAddModalVisible(false);
+        setEditModalVisible(false);
+        setDeleteModalVisible(false);
+        setMovieDetailsVisible(false);
     }
 
-    onSubmitAction(item) {
-        let stateList = this.state.movieList;
+    function onAddMovieSubmitAction(item) {
+        let stateList = [...movieList];
         let uniqueId = stateList.length + 1;
         item.id = uniqueId;
         stateList.push(item);
-        this.setState({ movieList: [...this.state.movieList, item] })
-        this.onCloseAction();
+        setMovieList(stateList)
+        filterMovieVisibility(stateList);
+        onCloseAction();
     }
 
-    onSaveAction(item) {
-        let stateList = [...this.state.movieList];
+    function onEditMovieSaveAction(item) {
+        let stateList = [...movieList];
         stateList.forEach((obj, i) => { if (obj.id === item.id) { stateList[i] = item } });
-        this.setState({ movieList: stateList })
-        this.onCloseAction();
+        setMovieList(stateList)
+        filterMovieVisibility(stateList);
+        onCloseAction();
     }
 
-    onConfirmAction(item) {
-        let stateList = this.state.movieList;
-        let modList = stateList.filter((obj) => obj.id !== item.id);
-        this.setState({ movieList: modList })
-        this.onCloseAction();
+    function onDeleteMovieConfirmAction(item) {
+        let stateList = [...movieList];
+        stateList = stateList.filter((obj) => obj.id !== item.id);
+        setMovieList(stateList);
+        setMovieList((state) => {
+            console.log(state);
+            filterMovieVisibility(state);
+            onCloseAction();
+            return state;
+          }); 
     }
 
-    onHandleSelect(event){
-        this.setState({sortOption: event.target.value})
-        let stateList = this.sortByKey(this.state.movieList, event.target.value);
-        this.setState({ movieList: stateList })
+    function onShowMovieDetailsAction(id) {
+        let stateList = [...movieList];
+        let listObject = stateList.find(obj => obj.id === id);
+        setMovieDetailSelection(listObject);
+        setMovieDetailsVisible(true);
+        window.scrollTo(0, 0);
     }
 
-    sortByKey(array, key) {
-        return array.sort(function(a, b) {
+    function onFilterCategoryClicked(category) {       
+        let stateList = sortByKey([...movieList]);
+        setFilterOption(category);
+        filterMovieVisibility(stateList, category);
+    }
+
+    function onHandleSelectedSortOption(selectedOption) {
+        setSortOption(selectedOption);
+        let stateList = sortByKey(visibleMovies, selectedOption);
+        filterMovieVisibility(stateList);
+    }
+
+    function sortByKey(array, key = sortOption) {
+        return array.sort(function (a, b) {
             var x = a[key]; var y = b[key];
             return ((x < y) ? -1 : ((x > y) ? 1 : 0));
         });
     }
 
-    async componentDidMount() {
-        let list = await this.fetchMovieListing();
-        let stateList = this.sortByKey(list, this.state.sortOption);
-        this.setState({ movieList: stateList })
+    function onMovieDetailsSearch() {
+        setMovieDetailsVisible(false);
     }
 
-    async fetchMovieListing() {
-        let response = await ProcessGetRequest();
-        if (response.status === 200) {
-            return response.data;
-        }
-        else {
-            this.setState({ isError: true })
-        }
+    function filterMovieVisibility(array, key = filterOption) {
+        console.log("==key ", key)
+        console.log("==array ", array)
+        console.log("==movieList ", movieList)
+        let initialList = [];
+        (movieList.length === 0) ? initialList = array : initialList = [...movieList]; //hack as movieList is empty initially always. Need to check and remove this.
+        let filteredList = (key === 'all') ? initialList : array.filter(item => item.description.toLowerCase().includes(key));
+        console.log("==filteredList ", filteredList)
+        setVisibleMovies([...filteredList]);
     }
 
-    render() {
-        return (
-            <>
+    const {response, error} = FetchMovies();
+    useEffect(() => {        
+            let list = sortByKey(response || []);
+            setMovieList(list);
+            //BUGS:
+            //1) Adding setState(setMovieList) in useEffect is not updating state immediately, hence required for initial call. Need to verify with Alex.
+            //2) On deleting a movie, movieList is not updating. I think it is related to useEffect hook somehow.
+            setMovieList((state) => {
+                //movieList remains empty here
+                filterMovieVisibility(state);
+                return state;
+            }); 
+            console.log(response);
+    }, [response]);
+
+    return (
+        <>
+            {(isMovieDetailsVisible) ?
+                <div className='parent-header-movie-details-properties'>
+                    <div className='parent-header-layer'>
+                        <MovieDetails
+                            movieDetailSelection={movieDetailSelection}
+                            onMovieDetailsSearch={onMovieDetailsSearch}
+                        />
+                    </div>
+                </div> :
                 <div className='parent-header-properties'>
                     <Header
-                        isAddModalVisible={this.state.isAddModalVisible}
-                        onAddAction={this.onAddAction.bind(this)}
+                        isAddModalVisible={isAddModalVisible}
+                        onAddAction={onAddAction}
                     />
                 </div>
+            }
 
-                <div className='parent-background-properties'>
-                    <SortListing onHandleSelect={this.onHandleSelect.bind(this)}/>
-                    <ErrorBoundary
-                        isError={this.state.isError}>
-                        <React.Suspense
-                            fallback={<p className="parent-general-message">Loading titles...</p>}>
-                            <MoviesList
-                                listing={this.state.movieList}
-                                onEditAction={this.onEditAction.bind(this)}
-                                onDeleteAction={this.onDeleteAction.bind(this)}
-                            />
-                        </React.Suspense>
-                    </ErrorBoundary>
-                </div>
-                <div className='parent-footer-properties'>
-                    <Footer />
-                </div>
-                {(this.state.isEditModalVisible) ?
-                    <AddEditMovie
-                        processEditMovieField={this.state.processEditMovieField}
-                        onCloseAction={this.onCloseAction.bind(this)}
-                        onSaveAction={this.onSaveAction.bind(this)}
-                    /> : null}
-                {(this.state.isAddModalVisible) ?
-                    <AddEditMovie
-                        onCloseAction={this.onCloseAction.bind(this)}
-                        onSubmitAction={this.onSubmitAction.bind(this)}
-                    /> : null}
-                {(this.state.isDeleteModalVisible) ?
-                    <DeleteMovie
-                        processDeleteMovieField={this.state.processDeleteMovieField}
-                        onCloseAction={this.onCloseAction.bind(this)}
-                        onConfirmAction={this.onConfirmAction.bind(this)}
-                    /> : null}
-            </>
-        )
-    }
-}
-
-export default RouletteMain;
+            <div className='parent-background-properties'>
+                <SortFilterListing onHandleSelectedSortOption={onHandleSelectedSortOption}
+                    onFilterCategoryClicked={onFilterCategoryClicked}
+                    displayedMoviesCount={visibleMovies.length}
+                    selectedFilter = {filterOption}
+                />
+                <ErrorBoundary
+                    isError={isError}>
+                    <React.Suspense
+                        fallback={<p className="parent-general-message">Loading titles...</p>}>
+                        <MoviesList
+                            movieList={visibleMovies}
+                            onEditAction={onEditAction}
+                            onDeleteAction={onDeleteAction}
+                            onShowMovieDetailsAction={onShowMovieDetailsAction}
+                        />
+                    </React.Suspense>
+                </ErrorBoundary>
+            </div>
+            <div className='parent-footer-properties'>
+                <Footer />
+            </div>
+            {(isEditModalVisible) ?
+                <AddEditMovie
+                    editMovieSelection={editMovieSelection}
+                    onCloseAction={onCloseAction}
+                    onEditMovieSaveAction={onEditMovieSaveAction}
+                /> : null}
+            {(isAddModalVisible) ?
+                <AddEditMovie
+                    onCloseAction={onCloseAction}
+                    onAddMovieSubmitAction={onAddMovieSubmitAction}
+                /> : null}
+            {(isDeleteModalVisible) ?
+                <DeleteMovie
+                    deleteMovieSelection={deleteMovieSelection}
+                    onCloseAction={onCloseAction}
+                    onDeleteMovieConfirmAction={onDeleteMovieConfirmAction}
+                /> : null}
+        </>
+    )
+}//useMemo, useCallback
