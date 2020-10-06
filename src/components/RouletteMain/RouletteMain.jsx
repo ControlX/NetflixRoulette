@@ -108,6 +108,10 @@ export default function RouletteMain() {
         });
     }
 
+    function onMovieDetailsSearch() {
+        setMovieDetailsVisible(false);
+    }
+
     function filterMovieVisibility(array, key = filterOption) {
         console.log("==key ", key)
         console.log("==array ", array)
@@ -119,16 +123,9 @@ export default function RouletteMain() {
         setVisibleMovies([...filteredList]);
     }
 
-    function onMovieDetailsSearch() {
-        setMovieDetailsVisible(false);
-    }
-
-    let response = FetchMovies();
+    const {response, error} = FetchMovies();
     useEffect(() => {        
-        let movieData = response.res;
-        if(movieData != null){
-            let list = movieData;
-            list = sortByKey(list);
+            let list = sortByKey(response || []);
             setMovieList(list);
             //BUGS:
             //1) Adding setState(setMovieList) in useEffect is not updating state immediately, hence required for initial call. Need to verify with Alex.
@@ -138,9 +135,8 @@ export default function RouletteMain() {
                 filterMovieVisibility(state);
                 return state;
             }); 
-        }
-        console.log(response);
-    }, [response.res]);
+            console.log(response);
+    }, [response]);
 
     return (
         <>
