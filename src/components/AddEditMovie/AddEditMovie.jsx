@@ -25,7 +25,7 @@ export default function AddEditMovie(props) {
     }
 
     function handleGenreChange(e) {
-        addMovieJson.genres = e.target.value;
+        addMovieJson.genres = (e.target.value).split(', ');
     }
 
     function handleOverviewChange(e) {
@@ -33,7 +33,7 @@ export default function AddEditMovie(props) {
     }
 
     function handleRuntimeChange(e) {
-        addMovieJson.runtime = e.target.value;
+        addMovieJson.runtime = Number(e.target.value);
     }
 
     let resetFields = () => {
@@ -102,7 +102,7 @@ export default function AddEditMovie(props) {
                                 <p className="modal-body-titles" >RELEASE DATE</p>
                                 <input className="modal-body-input" placeholder="Select Date" onChange={(e) => handleDateChange(e)} />
                                 <p className="modal-body-titles" >MOVIE URL</p>
-                                <input className="modal-body-input" placeholder="Movie URL here" defaultValue="./src/resources/movie_poster2.png" onChange={(e) => handleUrlChange(e)} />
+                                <input className="modal-body-input" placeholder="Movie URL here" onChange={(e) => handleUrlChange(e)} />
                                 <p className="modal-body-titles" >GENRE</p>
                                 <input className="modal-body-input" placeholder="Select Genre" onChange={(e) => handleGenreChange(e)} />
                                 <p className="modal-body-titles" >OVERVIEW</p>

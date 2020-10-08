@@ -6,8 +6,10 @@ export function FetchMovies() {
         .then(
             (result) => {
                 return result;
-            }
-        )
+            },
+            (error) => {
+                return error;
+            });
 }
 
 export function GetMovie(id) {
@@ -16,8 +18,10 @@ export function GetMovie(id) {
         .then(
             (result) => {
                 return result;
-            }
-        )
+            },
+            (error) => {
+                return error;
+            });
 }
 
 export function AddMovie(movie) {
@@ -30,8 +34,10 @@ export function AddMovie(movie) {
         .then(
             (result) => {
                 return result;
-            }
-        )
+            },
+            (error) => {
+                return error;
+            });
 }
 
 export function EditMovie(movie) {
@@ -44,8 +50,10 @@ export function EditMovie(movie) {
         .then(
             (result) => {
                 return result;
-            }
-        )
+            },
+            (error) => {
+                return error;
+            });
 }
 
 export function DeleteMovie(id) {
@@ -56,6 +64,8 @@ export function DeleteMovie(id) {
         .then(
             (result) => {
                 return result;
-            }
-        )
+            },
+            (error) => {
+                return error;
+            });
 }

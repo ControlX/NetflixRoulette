@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import './movie_details.css'
 
 export default function MovieDetails(props){
-    
+    console.log('PROPS:', props)
     return (
         <div>
             <p className='header-parent-label-properties'><strong>netflix</strong>roulette</p>

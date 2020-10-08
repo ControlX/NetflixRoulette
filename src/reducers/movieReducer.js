@@ -2,31 +2,41 @@ const movieReducer = (state = [], action) => {
 
     switch (action.type) {
         case 'ADD_MOVIE':
-            let stateCopy = [...state, action.payload];
-            localStorage.setItem('movie_titles', JSON.stringify(stateCopy));
+            let stateCopy = [...state]
+            stateCopy.push(action.payload);
+            console.log("statecopy", stateCopy)
             return stateCopy
 
         case 'DELETE_MOVIE':
             stateCopy = state.filter(x => x.id !== action.payload);
-            localStorage.setItem('movie_titles', JSON.stringify(stateCopy));
+            console.log("deleteMovieList", stateCopy)
             return stateCopy
 
         case 'EDIT_MOVIE':
             stateCopy = state.map((movie) => {
-                const { title, description, year, src, id, rating, runtime, overview } = action.payload;
+                const { title, genres, release_date, poster_path, id, vote_average, runtime, overview } = action.payload;
                 if (movie.id === id) {
                     movie.title = title;
-                    movie.description = description;
-                    movie.year = year;
-                    movie.src = src;
-                    movie.rating = rating;
+                    movie.genres = genres;
+                    movie.release_date = release_date;
+                    movie.poster_path = poster_path;
+                    movie.vote_average = vote_average;
                     movie.runtime = runtime;
                     movie.overview = overview;
                 }
                 return movie;
             })
-            localStorage.setItem('movie_titles', JSON.stringify(stateCopy));
             return stateCopy
+        
+        case 'GET_MOVIES':
+            return action.payload
+
+        case 'SORT_MOVIES':
+            return action.payload
+
+        case 'FILTER_MOVIES':
+            return action.payload
+            
         default:
             return state;
     }

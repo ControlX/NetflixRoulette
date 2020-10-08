@@ -2,19 +2,22 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import RouletteMain from './components/RouletteMain';
 import './components/RouletteMain/roulette_main.css';
-import { createStore } from 'redux';
-import movieReducer from './reducers/movieReducer'
-import {Provider} from 'react-redux'
+import { createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
+import rootReducer from './reducers';
+import {Provider} from 'react-redux';
 
 
 
 // let initialState = [{id:1,name:'John Doe',grade:1,school:'React Redux School'},{id:2,name:'Jane Doe',grade:2,school:'React Redux School'}
 // ,{id:3,name:'Terry Adams',grade:3,school:'React Redux School'},{id:4,name:'Jenny Smith',grade:4,school:'React Redux School'}];
-
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 let initialState = [];
+
+const middlewares = [thunk];
+
 let store = createStore(
-    movieReducer, [],
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    rootReducer, [], composeEnhancer(applyMiddleware(...middlewares))
 );
 // if( localStorage.getItem("students") === null)
 // localStorage.setItem('students',JSON.stringify(initialState));

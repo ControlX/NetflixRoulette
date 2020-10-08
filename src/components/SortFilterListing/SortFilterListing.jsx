@@ -21,6 +21,7 @@ export default function SortFilterListing(props) {
                     <option value="year">RELEASE DATE</option>
                     <option value="title">TITLE</option>
                     <option value="genres">GENRE</option>
+                    <option value="vote_average">RATINGS</option>
                 </select>
             </div>
             <div className="sort-result-number">
