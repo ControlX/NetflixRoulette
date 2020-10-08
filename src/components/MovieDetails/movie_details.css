@@ -47,7 +47,7 @@ span.movie-details-rating {
 .movie-details-genre{
     color: rgba(255, 255, 255, 0.623);
     font-size: 20px;
-    margin-top: -8px;
+    margin-top: 0px;
 }
 
 .movie-details-year-runtime{

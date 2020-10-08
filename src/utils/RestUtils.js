@@ -1,95 +1,61 @@
-import  { MovieJson } from './Constants'
+import { BASE_URL } from './Constants'
 
-export function ProcessGetRequest() { 
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            const MovieList = MovieJson();
-            let response = {};
-            if(MovieList !== undefined){
-                response.data = MovieList;
-                response.status = 200;
-                resolve(response);
+export function FetchMovies() {
+    return fetch(BASE_URL + "/movies")
+        .then(res => res.json())
+        .then(
+            (result) => {
+                return result;
             }
-            else{
-                response.data = null;
-                response.status = 400;
-                response.error = "Requested information is not found: ";
-                reject(Error(response.error + response.status))
-            }
-        }, 500);
-    })
+        )
 }
 
-// export function ProcessPutRequest(modItem){
-//     return new Promise((resolve, reject) => {
-//         setTimeout(() => {
-//             const MovieList = LoadMovieJson();
-//             let response;
-//             if(MovieList !== undefined){
-//                 MovieList.forEach((item, i) => {
-//                     if(item.id === modItem.id){
-//                         MovieList[i] = modItem;
-//                         response.data = modItem;
-//                         response.status = 200;
-//                         return resolve(response)
-//                     }
-//                 })
-//                 response.data = null;
-//                 response.status = 404;
-//                 return reject(Error(response));
-//             }
-//             else{
-//                 response.data = null;
-//                 response.data = 400;
-//                 return reject(Error(response));
-//             }
-//         }, 3000);
-//     })
-// }
+export function GetMovie(id) {
+    return fetch(BASE_URL + "/movies" + id)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                return result;
+            }
+        )
+}
 
-// export function ProcessPostRequest(item){
-//     return new Promise((resolve, reject) => {
-//         setTimeout(() => {
-//             const MovieList = LoadMovieJson();
-//             let response;
-//             if(MovieList !== undefined){
-//                 MovieList.push(item)
-//                 response.data = MovieList;
-//                 response.status = 200;
-//                 return resolve(response);
-//             }
-//             else{
-//                 response.data = null;
-//                 response.data = 404;
-//                 return reject(Error(response));
-//             }
-//         }, 3000);
-//     })
-// }
+export function AddMovie(movie) {
+    return fetch(BASE_URL + "/movies", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: movie
+    })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                return result;
+            }
+        )
+}
 
-// export function ProcessDeleteRequest(id){
-//     return new Promise((resolve, reject) => {
-//         setTimeout(() => {
-//             const MovieList = LoadMovieJson();
-//             let response;
-//             if(MovieList !== undefined){
-//                 MovieList.forEach((item, i, object) => {
-//                     if(item.id === modItem.id){
-//                         object.splice(i, 1)
-//                         response.data = MovieList;
-//                         response.status = 200;
-//                         return resolve(response)
-//                     }
-//                 })
-//                 response.data = null;
-//                 response.status = 404;
-//                 return reject(Error(response));
-//             }
-//             else{
-//                 response.data = null;
-//                 response.data = 400;
-//                 return reject(Error(response));
-//             }
-//         }, 3000);
-//     })
-// }
+export function EditMovie(movie) {
+    return fetch(BASE_URL + "/movies", {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: movie
+    })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                return result;
+            }
+        )
+}
+
+export function DeleteMovie(id) {
+    return fetch(BASE_URL + "/movies/" + id, {
+        method: 'DELETE'
+    })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                return result;
+            }
+        )
+}

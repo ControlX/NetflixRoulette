@@ -2,16 +2,18 @@ import React, { useState, useEffect, useCallback } from 'react'
 import Header from '../Header'
 import Footer from '../Footer'
 import ErrorBoundary from '../ErrorBoundary'
-import { ProcessGetRequest } from '../../utils/RestUtils'
 import AddEditMovie from '../AddEditMovie'
 import DeleteMovie from '../DeleteMovie'
 import SortFilterListing from '../SortFilterListing'
 import MovieDetails from '../MovieDetails'
-import FetchMovies from '../CustomHooks'
+import { FetchMovies } from '../../utils/RestUtils'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux';
+import { addMovie, deleteMovie, editMovie } from '../../actions/movieActions'
 import "regenerator-runtime"
 const MoviesList = React.lazy(() => import("../MoviesList"));
 
-export default function RouletteMain() {
+function RouletteMain(props) {
     const [isError, setError] = useState(false);
     const [movieList, setMovieList] = useState([]);
     const [visibleMovies, setVisibleMovies] = useState([]);
@@ -27,6 +29,7 @@ export default function RouletteMain() {
 
     function onAddAction() {
         setAddModalVisible(true);
+        props.addMovie({ id: Math.max(...props.movieList.map(function (o) { return o.id })) + 1, name: '', grade: 1, movie: '' });
     }
 
     function onEditAction(id) {
@@ -78,7 +81,7 @@ export default function RouletteMain() {
             filterMovieVisibility(state);
             onCloseAction();
             return state;
-          }); 
+        });
     }
 
     function onShowMovieDetailsAction(id) {
@@ -89,7 +92,7 @@ export default function RouletteMain() {
         window.scrollTo(0, 0);
     }
 
-    function onFilterCategoryClicked(category) {       
+    function onFilterCategoryClicked(category) {
         let stateList = sortByKey([...movieList]);
         setFilterOption(category);
         filterMovieVisibility(stateList, category);
@@ -97,8 +100,10 @@ export default function RouletteMain() {
 
     function onHandleSelectedSortOption(selectedOption) {
         setSortOption(selectedOption);
-        let stateList = sortByKey(visibleMovies, selectedOption);
-        filterMovieVisibility(stateList);
+        setSortOption((state) => {
+            let stateList = sortByKey(visibleMovies, state);
+            filterMovieVisibility(stateList);
+        })
     }
 
     function sortByKey(array, key = sortOption) {
@@ -118,25 +123,32 @@ export default function RouletteMain() {
         console.log("==movieList ", movieList)
         let initialList = [];
         (movieList.length === 0) ? initialList = array : initialList = [...movieList]; //hack as movieList is empty initially always. Need to check and remove this.
-        let filteredList = (key === 'all') ? initialList : array.filter(item => item.description.toLowerCase().includes(key));
+        let filteredList = (key === 'all') ? initialList : array.filter(item => ((item.genres).toString()).toLowerCase().includes(key));
         console.log("==filteredList ", filteredList)
         setVisibleMovies([...filteredList]);
     }
 
-    const {response, error} = FetchMovies();
-    useEffect(() => {        
-            let list = sortByKey(response || []);
-            setMovieList(list);
-            //BUGS:
-            //1) Adding setState(setMovieList) in useEffect is not updating state immediately, hence required for initial call. Need to verify with Alex.
-            //2) On deleting a movie, movieList is not updating. I think it is related to useEffect hook somehow.
-            setMovieList((state) => {
-                //movieList remains empty here
-                filterMovieVisibility(state);
-                return state;
-            }); 
-            console.log(response);
-    }, [response]);
+
+    useEffect(() => {
+        async function init() {
+            const response = await FetchMovies();
+            if (response.data) {
+                setMovieList(response.data)
+                // //BUGS:
+                // //1) Adding setState(setMovieList) in useEffect is not updating state immediately, hence required for initial call. Need to verify with Alex.
+                // //2) On deleting a movie, movieList is not updating. I think it is related to useEffect hook somehow.
+                setMovieList((state) => {
+                    //     //movieList remains empty here
+                    filterMovieVisibility(state);
+                    return state;
+                });
+            }
+            else {
+                setError(true)
+            }
+        }
+        init();
+    }, []);
 
     return (
         <>
@@ -161,7 +173,7 @@ export default function RouletteMain() {
                 <SortFilterListing onHandleSelectedSortOption={onHandleSelectedSortOption}
                     onFilterCategoryClicked={onFilterCategoryClicked}
                     displayedMoviesCount={visibleMovies.length}
-                    selectedFilter = {filterOption}
+                    selectedFilter={filterOption}
                 />
                 <ErrorBoundary
                     isError={isError}>
@@ -198,4 +210,20 @@ export default function RouletteMain() {
                 /> : null}
         </>
     )
-}//useMemo, useCallback
+}
+
+const mapStateToProps = (state) => {
+    return {
+        movieList: state
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({
+        addMovie: addMovie,
+        deleteMovie: deleteMovie,
+        editMovie: editMovie
+    }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RouletteMain)

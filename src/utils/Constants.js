@@ -1,5 +1,7 @@
+const BASE_URL = "http://localhost:4000";
+
 const FilterCategories = () => {
-    return ["all", "documentary", "comedy", "horror", "crime"];
+    return ["all", "adventure", "family", "comedy", "action", "crime"];
 }
 
 const MovieJson = () => {
@@ -157,4 +159,4 @@ const MovieJson = () => {
     ]
 }
 
-export { MovieJson, FilterCategories };
+export { MovieJson, FilterCategories, BASE_URL };
