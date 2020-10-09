@@ -10,10 +10,15 @@ function sortMovies(array, key) {
             }
 }
 
-function sortByKey(array, key = sortOption) {
+function sortByKey(array, key) {
     return array.sort(function (a, b) {
         var x = a[key]; var y = b[key];
-        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        if(key === 'year'){
+            return new Date(b.date) - new Date(a.date);
+        }
+        else{
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));    
+        }
     });
 }
 
