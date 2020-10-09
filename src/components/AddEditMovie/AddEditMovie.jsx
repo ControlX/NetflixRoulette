@@ -8,24 +8,24 @@ export default function AddEditMovie(props) {
     if (props.editMovieSelection !== undefined) {
         addMovieJson = props.editMovieSelection;
     }
-    else {
-        addMovieJson.src = "./src/resources/movie_poster2.png" //Temperory to refer to internal asset location
-    }
+    // else {
+    //     addMovieJson.src = "./src/resources/movie_poster2.png" //Temperory to refer to internal asset location
+    // }
 
     function handleTitleChange(e) {
         addMovieJson.title = e.target.value;
     }
 
     function handleDateChange(e) {
-        addMovieJson.year = e.target.value;
+        addMovieJson.release_date = e.target.value;
     }
 
     function handleUrlChange(e) {
-        addMovieJson.src = e.target.value;
+        addMovieJson.poster_path = e.target.value;
     }
 
     function handleGenreChange(e) {
-        addMovieJson.description = e.target.value;
+        addMovieJson.genres = (e.target.value).split(', ');
     }
 
     function handleOverviewChange(e) {
@@ -33,7 +33,7 @@ export default function AddEditMovie(props) {
     }
 
     function handleRuntimeChange(e) {
-        addMovieJson.runtime = e.target.value;
+        addMovieJson.runtime = Number(e.target.value);
     }
 
     let resetFields = () => {
@@ -65,11 +65,11 @@ export default function AddEditMovie(props) {
                                 <p className="modal-body-titles">TITLE</p>
                                 <input className="modal-body-input" placeholder="Movie Title" defaultValue={props.editMovieSelection.title} onChange={(e) => handleTitleChange(e)} />
                                 <p className="modal-body-titles" >RELEASE DATE</p>
-                                <input className="modal-body-input" placeholder="Select Date" defaultValue={props.editMovieSelection.year} onChange={(e) => handleDateChange(e)} />
+                                <input className="modal-body-input" placeholder="Select Date" defaultValue={props.editMovieSelection.release_date} onChange={(e) => handleDateChange(e)} />
                                 <p className="modal-body-titles" >MOVIE URL</p>
-                                <input className="modal-body-input" placeholder="Movie URL here" defaultValue={props.editMovieSelection.src} onChange={(e) => handleUrlChange(e)} />
+                                <input className="modal-body-input" placeholder="Movie URL here" defaultValue={props.editMovieSelection.poster_path} onChange={(e) => handleUrlChange(e)} />
                                 <p className="modal-body-titles" >GENRE</p>
-                                <input className="modal-body-input" placeholder="Select Genre" defaultValue={props.editMovieSelection.description} onChange={(e) => handleGenreChange(e)} />
+                                <input className="modal-body-input" placeholder="Select Genre" defaultValue={props.editMovieSelection.genres} onChange={(e) => handleGenreChange(e)} />
                                 <p className="modal-body-titles" >OVERVIEW</p>
                                 <input className="modal-body-input" placeholder="Overview here" defaultValue={props.editMovieSelection.overview} onChange={(e) => handleOverviewChange(e)} />
                                 <p className="modal-body-titles" >RUNTIME</p>
@@ -102,7 +102,7 @@ export default function AddEditMovie(props) {
                                 <p className="modal-body-titles" >RELEASE DATE</p>
                                 <input className="modal-body-input" placeholder="Select Date" onChange={(e) => handleDateChange(e)} />
                                 <p className="modal-body-titles" >MOVIE URL</p>
-                                <input className="modal-body-input" placeholder="Movie URL here" defaultValue="./src/resources/movie_poster2.png" onChange={(e) => handleUrlChange(e)} />
+                                <input className="modal-body-input" placeholder="Movie URL here" onChange={(e) => handleUrlChange(e)} />
                                 <p className="modal-body-titles" >GENRE</p>
                                 <input className="modal-body-input" placeholder="Select Genre" onChange={(e) => handleGenreChange(e)} />
                                 <p className="modal-body-titles" >OVERVIEW</p>

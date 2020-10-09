@@ -11,10 +11,10 @@ export default function MoviesList(props){
             <div className='gallery' key={movie.id}>
             <MovieCard
                 id={movie.id}
-                src={movie.src}
+                poster_path={movie.poster_path}
                 title={movie.title}
-                year= {movie.year}
-                description={movie.description}
+                release_date= {movie.release_date}
+                genres={movie.genres}
                 overview={movie.overview}
                 runtime={movie.runtime}
                 onEditAction={props.onEditAction}
