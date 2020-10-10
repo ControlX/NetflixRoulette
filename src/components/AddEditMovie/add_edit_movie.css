@@ -93,6 +93,7 @@
     background-color: #42424277;
     color: #FFFFFF;
     width: 80%;
+    outline: none;
   }
 
   .modal-btn-reset{
@@ -105,6 +106,7 @@
     margin-left: 2%;
     font-size: 18px;
     float: right;
+    outline: none;
   }
 
   .modal-btn-submit{
@@ -116,6 +118,7 @@
     margin-left: 2%;
     font-size: 18px;
     float: right;
+    outline: none;
 }
 
 .modal-body-input-disabled{
@@ -125,3 +128,58 @@
     color: #FFFFFF;
     width: 80%;
   }
+
+.capitalize-first-char{
+  text-transform: capitalize;
+}
+
+.modal-error-msg{
+  color: rgb(255, 255, 255);
+  font-size: 12px;
+}
+
+.multiselect {
+  width: 87%;
+}
+
+.selectBox {
+  position: relative;
+}
+
+.modal-body-input-select{
+    background-color: #232323;
+    color: #fdfdfd80;
+    padding: 10px 20px;
+    outline: none;
+
+    font-size: 20px;
+    padding: 20px 15px;
+    background-color: #42424277;
+    width: 80%;
+}
+
+.selectBox select {
+  width: 100%;
+  font-weight: 100;
+}
+
+.overSelect {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+#checkboxes {
+  display: none;
+  border: 1px #dadada67 solid;
+}
+
+#checkboxes label {
+  display: block;
+}
+
+#checkboxes label:hover {
+  background-color: #74859600;
+}
