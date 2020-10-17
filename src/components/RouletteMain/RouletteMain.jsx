@@ -2,16 +2,24 @@ import React, { useState, useEffect, useCallback } from 'react'
 import Header from '../Header'
 import Footer from '../Footer'
 import ErrorBoundary from '../ErrorBoundary'
-import { ProcessGetRequest } from '../../utils/RestUtils'
 import AddEditMovie from '../AddEditMovie'
 import DeleteMovie from '../DeleteMovie'
 import SortFilterListing from '../SortFilterListing'
 import MovieDetails from '../MovieDetails'
-import FetchMovies from '../CustomHooks'
+import { AddMovie, FetchMovies } from '../../utils/RestUtils'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux';
+import getMovies from '../../actions/fetchMovies';
+import addMovie from '../../actions/addMovie';
+import editMovie from '../../actions/editMovie';
+import deleteMovie from '../../actions/deleteMovie';
+import getMovie from '../../actions/getMovie';
+import sortMovies from '../../actions/sortMovies';
+import filterMovies from '../../actions/filterMovies';
 import "regenerator-runtime"
 const MoviesList = React.lazy(() => import("../MoviesList"));
-
-export default function RouletteMain() {
+const movies = [];
+function RouletteMain(props) {
     const [isError, setError] = useState(false);
     const [movieList, setMovieList] = useState([]);
     const [visibleMovies, setVisibleMovies] = useState([]);
@@ -30,14 +38,14 @@ export default function RouletteMain() {
     }
 
     function onEditAction(id) {
-        let stateList = [...movieList];
+        let stateList = [...props.movieProps];
         let listObject = stateList.find(obj => obj.id === id)
         setEditMovieSelection(listObject);
         setEditModalVisible(true);
     }
 
     function onDeleteAction(id) {
-        let stateList = [...movieList];
+        let stateList = [...props.movieProps];
         let listObject = stateList.find(obj => obj.id === id);
         console.log("--", listObject)
         setDeleteMovieSelection(listObject);
@@ -52,53 +60,39 @@ export default function RouletteMain() {
     }
 
     function onAddMovieSubmitAction(item) {
-        let stateList = [...movieList];
-        let uniqueId = stateList.length + 1;
-        item.id = uniqueId;
-        stateList.push(item);
-        setMovieList(stateList)
-        filterMovieVisibility(stateList);
+        props.addMovie(item)
         onCloseAction();
     }
 
     function onEditMovieSaveAction(item) {
-        let stateList = [...movieList];
-        stateList.forEach((obj, i) => { if (obj.id === item.id) { stateList[i] = item } });
-        setMovieList(stateList)
-        filterMovieVisibility(stateList);
+        props.editMovie(item)
         onCloseAction();
     }
 
     function onDeleteMovieConfirmAction(item) {
-        let stateList = [...movieList];
-        stateList = stateList.filter((obj) => obj.id !== item.id);
-        setMovieList(stateList);
-        setMovieList((state) => {
-            console.log(state);
-            filterMovieVisibility(state);
-            onCloseAction();
-            return state;
-          }); 
+        props.deleteMovie(item.id);
+        onCloseAction();
     }
 
     function onShowMovieDetailsAction(id) {
-        let stateList = [...movieList];
+        props.getMovie(id)
+        let stateList = [...props.movieProps];
         let listObject = stateList.find(obj => obj.id === id);
         setMovieDetailSelection(listObject);
         setMovieDetailsVisible(true);
         window.scrollTo(0, 0);
     }
 
-    function onFilterCategoryClicked(category) {       
-        let stateList = sortByKey([...movieList]);
+    function onFilterCategoryClicked(category) {
         setFilterOption(category);
-        filterMovieVisibility(stateList, category);
+        props.filterMovies(category);
     }
 
     function onHandleSelectedSortOption(selectedOption) {
         setSortOption(selectedOption);
-        let stateList = sortByKey(visibleMovies, selectedOption);
-        filterMovieVisibility(stateList);
+        setSortOption((state) => {
+            props.sortMovies([...props.movieProps], state)
+        })
     }
 
     function sortByKey(array, key = sortOption) {
@@ -118,25 +112,14 @@ export default function RouletteMain() {
         console.log("==movieList ", movieList)
         let initialList = [];
         (movieList.length === 0) ? initialList = array : initialList = [...movieList]; //hack as movieList is empty initially always. Need to check and remove this.
-        let filteredList = (key === 'all') ? initialList : array.filter(item => item.description.toLowerCase().includes(key));
+        let filteredList = (key === 'all') ? initialList : array.filter(item => ((item.genres).toString()).toLowerCase().includes(key));
         console.log("==filteredList ", filteredList)
         setVisibleMovies([...filteredList]);
     }
-
-    const {response, error} = FetchMovies();
-    useEffect(() => {        
-            let list = sortByKey(response || []);
-            setMovieList(list);
-            //BUGS:
-            //1) Adding setState(setMovieList) in useEffect is not updating state immediately, hence required for initial call. Need to verify with Alex.
-            //2) On deleting a movie, movieList is not updating. I think it is related to useEffect hook somehow.
-            setMovieList((state) => {
-                //movieList remains empty here
-                filterMovieVisibility(state);
-                return state;
-            }); 
-            console.log(response);
-    }, [response]);
+  
+    useEffect(() => {
+        props.getMovies()
+    }, []);
 
     return (
         <>
@@ -160,15 +143,15 @@ export default function RouletteMain() {
             <div className='parent-background-properties'>
                 <SortFilterListing onHandleSelectedSortOption={onHandleSelectedSortOption}
                     onFilterCategoryClicked={onFilterCategoryClicked}
-                    displayedMoviesCount={visibleMovies.length}
-                    selectedFilter = {filterOption}
+                    displayedMoviesCount={props.movieProps.length}
+                    selectedFilter={filterOption}
                 />
                 <ErrorBoundary
                     isError={isError}>
                     <React.Suspense
                         fallback={<p className="parent-general-message">Loading titles...</p>}>
                         <MoviesList
-                            movieList={visibleMovies}
+                            movieList={props.movieProps}
                             onEditAction={onEditAction}
                             onDeleteAction={onDeleteAction}
                             onShowMovieDetailsAction={onShowMovieDetailsAction}
@@ -198,4 +181,28 @@ export default function RouletteMain() {
                 /> : null}
         </>
     )
-}//useMemo, useCallback
+}
+
+const mapStateToProps = (state) => {
+    console.log("ooo", state)
+    const {movieReducer, movieDetailReducer} = state;
+    
+    return {
+        movieProps : movieReducer,
+        movieDetailProps : movieDetailReducer
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({
+        addMovie: addMovie,
+        editMovie: editMovie,
+        deleteMovie: deleteMovie,
+        getMovies: getMovies,
+        getMovie: getMovie,
+        sortMovies: sortMovies,
+        filterMovies: filterMovies
+    }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RouletteMain)

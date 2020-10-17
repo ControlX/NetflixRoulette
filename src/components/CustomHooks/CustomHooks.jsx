@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import { ProcessGetRequest } from '../../utils/RestUtils'
+import { FetchAllMovies } from '../../utils/RestUtils'
 
 /**
  * 
@@ -18,7 +18,7 @@ export default function useFetch(url, options) {
                 //   const json = await res.json();
                 let response = localStorage.getItem('movie_titles');
                 if (response === null || response === undefined || response.length === 0) {
-                    response = await ProcessGetRequest();
+                    response = await FetchAllMovies();
                     if (response.status === 200) {
                         localStorage.setItem('movie_titles', JSON.stringify(response));
                         setResponse(response.data);

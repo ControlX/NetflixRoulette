@@ -17,6 +17,7 @@
     background-color: #232323;
     color: #F65261;
     padding: 10px 20px;
+    outline: none;
 }
 
 .parent-sort-label{
