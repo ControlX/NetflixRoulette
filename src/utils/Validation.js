@@ -27,8 +27,13 @@ function isValidDate(dateString) {
     return d.toISOString().slice(0,10) === dateString;
   }
 
+  function isString(value) {
+	return typeof value === 'string' || value instanceof String;
+  }
+
 export {
     isValidUrl,
     isNumber,
-    isValidDate
+    isValidDate,
+    isString
 }

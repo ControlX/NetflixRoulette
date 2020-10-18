@@ -1,15 +1,15 @@
-import {GET_MOVIE, ERROR} from './movieActions';
+import {GET_MOVIES, ERROR} from './movieActions';
 import {BASE_URL} from '../utils/Constants'
-function getMovie(id) {
+function searchMovies(searchText) {
     return dispatch => {
-        fetch(BASE_URL + '/movies/' + id)
+        fetch(BASE_URL + '/movies?searchBy=title&search=' + searchText)
         .then(res => res.json())
         .then(
             (result) => {
-                console.log("movie details", result)
+                console.log(result.data)
                 dispatch({
-                    type: GET_MOVIE,
-                    payload: result
+                    type: GET_MOVIES,
+                    payload: result.data
                 });
                 dispatch({
                     type: ERROR,
@@ -26,4 +26,4 @@ function getMovie(id) {
     }
 }
 
-export default getMovie;
+export default searchMovies;

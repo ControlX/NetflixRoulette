@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import default_header_image from '../../resources/icon_search_transparent.png'
 import './movie_details.css'
 
 export default function MovieDetails(props){
@@ -7,7 +7,7 @@ export default function MovieDetails(props){
     return (
         <div>
             <p className='header-parent-label-properties'><strong>netflix</strong>roulette</p>
-            <img className='movie-details-search' src="./src/resources/icon_search_transparent.png" onClick={() => props.onMovieDetailsSearch()}/>
+            <img className='movie-details-search' src={default_header_image} onClick={() => props.onShowDefaultHeader()}/>
         <div className='movie-details-parent'>
             <div className='movie-details-movie-placeholder'>
             <img src={props.movieDetailSelection.poster_path} width="330" height="450" />
