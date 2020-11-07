@@ -16,7 +16,7 @@ let store = createStore(
     rootReducer, initialState, composeEnhancer(applyMiddleware(...middlewares))
 );
 
- const App = () => (
+const App = () => (
     <div>
         <RouletteMain />
     </div>
