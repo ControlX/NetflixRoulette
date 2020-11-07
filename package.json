@@ -3,16 +3,26 @@
   "version": "1.0.0",
   "description": "webpack and configuration",
   "main": "index.js",
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "/index.js"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$": "identity-obj-proxy"
+    }
+  },
   "scripts": {
     "start:dev": "NODE_ENV=development webpack-dev-server --open",
     "start:prod": "NODE_ENV=production webpack-dev-server --open",
-    "test": "jest",
+    "test": "jest ./tests/ --coverage",
+    "test:coverage": "jest --watch --coverage",
     "build:dev": "NODE_ENV=development webpack --mode development",
     "build:prod": "NODE_ENV=production webpack --mode production"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ControlX/reactjs_2_webpack.git"
+    "url": "git+https://github.com/ControlX/NetflixRoulette.git"
   },
   "keywords": [
     "webpack_and_configuration"
@@ -20,10 +30,11 @@
   "author": "Abhishek Verma",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ControlX/reactjs_2_webpack/issues"
+    "url": "https://github.com/ControlX/NetflixRoulette/issues"
   },
-  "homepage": "https://github.com/ControlX/reactjs_2_webpack#readme",
+  "homepage": "https://github.com/ControlX/NetflixRoulette#readme",
   "dependencies": {
+    "@babel/plugin-syntax-jsx": "^7.12.1",
     "formik": "^2.2.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
@@ -36,13 +47,21 @@
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",
-    "@babel/preset-env": "^7.11.0",
-    "@babel/preset-react": "^7.10.4",
+    "@babel/preset-env": "^7.12.1",
+    "@babel/preset-react": "^7.12.5",
+    "@testing-library/jest-dom": "^5.11.5",
+    "@testing-library/react": "^11.1.0",
+    "babel-jest": "^26.6.3",
     "babel-loader": "^8.1.0",
     "css-loader": "^4.2.2",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.5",
     "file-loader": "^6.0.0",
     "html-webpack-plugin": "^4.3.0",
-    "jest": "^26.3.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^26.6.3",
+    "react-test-renderer": "^17.0.1",
+    "redux-mock-store": "^1.5.4",
     "style-loader": "^1.2.1",
     "url-loader": "^4.1.0",
     "webpack": "^4.44.1",

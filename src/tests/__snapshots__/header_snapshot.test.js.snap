@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`===Header Snapshot Test=== 1`] = `
+<div>
+  <p
+    className="header-parent-label-properties"
+  >
+    <strong>
+      netflix
+    </strong>
+    roulette
+  </p>
+  <button
+    className="header-btn-add-movie-properties"
+    onClick={[Function]}
+  >
+    + ADD MOVIE
+  </button>
+  <br />
+  <br />
+  <label
+    className="header-lbl-find-properties"
+  >
+    FIND YOUR MOVIE
+  </label>
+  <br />
+  <input
+    className="header-input-properties"
+    onChange={[Function]}
+    placeholder="What do you want to watch?"
+  />
+  <button
+    className="header-btn-search-properties"
+    onClick={[Function]}
+  >
+    SEARCH
+  </button>
+</div>
+`;
