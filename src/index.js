@@ -15,7 +15,7 @@ const middlewares = [thunk];
 let store = createStore(
     rootReducer, initialState, composeEnhancer(applyMiddleware(...middlewares))
 );
-
+//films
  const App = () => (
     <div>
         <RouletteMain />

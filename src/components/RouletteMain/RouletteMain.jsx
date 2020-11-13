@@ -188,6 +188,21 @@ function RouletteMain(props) {
         </>)
     }
 
+    //Todo:
+    // Can put some html before and after route
+    // Need to create separate component like showing movies
+    // Render some condition if no movies
+    // Should use more than 1 route - Check Dhaneesh
+    // Header is the one that changes
+    //
+
+    /**
+     * Update redux store to display edit/add/delete modals or not
+     * Reduce complexity
+     * Try to separate 
+     * Do not connect with each other use redux store to connect them.
+     */
+
     return (
         <Router>
             <Switch>
@@ -197,7 +212,7 @@ function RouletteMain(props) {
                 }} />
                 <Redirect exact from="/all" to="/film"  ></Redirect>
                 <Route exact path="/film"> {loadMovies()} </Route>
-                <Route exact path="/film/:movieId" children={({ match }) => {
+                <Route exact path="/film/:movieId" children={({ match }) => {//child component
                     navigateToMovieDetails(match.params.movieId)
                     return loadMovies();
                 }} />
