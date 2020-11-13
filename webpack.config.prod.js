@@ -1,5 +1,7 @@
 const path = require('path');
 const HWP = require('html-webpack-plugin');
+const webpack = require('webpack');
+
 module.exports = {  
     devtool: 'eval-source-map',
     mode: 'production',
@@ -34,8 +36,12 @@ module.exports = {
     resolve: {
       modules: [path.resolve(__dirname, "/src"), "node_modules"],
       extensions: [".js", ".jsx", ".json"],
+      alias: {
+        'react-dom': '@hot-loader/react-dom',
+      },
     },
     plugins:[
+       new webpack.HashedModuleIdsPlugin(),
        new HWP(
           {template: path.join(__dirname,'/src/index.html')}
        )
