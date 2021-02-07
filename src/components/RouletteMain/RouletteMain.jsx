@@ -6,7 +6,8 @@ import AddEditMovie from '../AddEditMovie'
 import DeleteMovie from '../DeleteMovie'
 import SortFilterListing from '../SortFilterListing'
 import MovieDetails from '../MovieDetails'
-import { AddMovie, FetchMovies } from '../../utils/RestUtils'
+import PageNotFound from '../PageNotFound'
+import NoMovieFound from '../NoMovieFound'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
 import getMovies from '../../actions/fetchMovies';
@@ -16,13 +17,14 @@ import deleteMovie from '../../actions/deleteMovie';
 import getMovie from '../../actions/getMovie';
 import sortMovies from '../../actions/sortMovies';
 import filterMovies from '../../actions/filterMovies';
+import searchMovies from '../../actions/searchMovies';
+import { isString } from '../../utils/Validation'
+import {BrowserRouter as Router, Redirect, Switch, Route } from 'react-router-dom';
 import "regenerator-runtime"
+
 const MoviesList = React.lazy(() => import("../MoviesList"));
-const movies = [];
 function RouletteMain(props) {
     const [isError, setError] = useState(false);
-    const [movieList, setMovieList] = useState([]);
-    const [visibleMovies, setVisibleMovies] = useState([]);
     const [sortOption, setSortOption] = useState("year");
     const [filterOption, setFilterOption] = useState("all");
     const [isAddModalVisible, setAddModalVisible] = useState(false);
@@ -31,7 +33,12 @@ function RouletteMain(props) {
     const [isMovieDetailsVisible, setMovieDetailsVisible] = useState(false);
     const [editMovieSelection, setEditMovieSelection] = useState({});
     const [deleteMovieSelection, setDeleteMovieSelection] = useState({});
-    const [movieDetailSelection, setMovieDetailSelection] = useState({});
+ 
+    var isSearch = false;
+
+    function setHistory(path, subPath="") {
+        window.history.replaceState(null, "Movie", "/" + path + "/" + subPath);
+    }
 
     function onAddAction() {
         setAddModalVisible(true);
@@ -76,10 +83,8 @@ function RouletteMain(props) {
 
     function onShowMovieDetailsAction(id) {
         props.getMovie(id)
-        let stateList = [...props.movieProps];
-        let listObject = stateList.find(obj => obj.id === id);
-        setMovieDetailSelection(listObject);
         setMovieDetailsVisible(true);
+        setHistory("film", id);
         window.scrollTo(0, 0);
     }
 
@@ -95,40 +100,38 @@ function RouletteMain(props) {
         })
     }
 
-    function sortByKey(array, key = sortOption) {
-        return array.sort(function (a, b) {
-            var x = a[key]; var y = b[key];
-            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-        });
+    function onMovieTitleSearch(searchString){
+        setHistory("search", searchString, false);
+        if(!isSearch){
+            props.searchMovies(searchString);//re-rendering problem in design probably that's why if condition is put(Bad implementation)
+            isSearch = true;
+        }
     }
 
-    function onMovieDetailsSearch() {
+    function onShowDefaultHeader() {
+        setHistory("film");
         setMovieDetailsVisible(false);
     }
 
-    function filterMovieVisibility(array, key = filterOption) {
-        console.log("==key ", key)
-        console.log("==array ", array)
-        console.log("==movieList ", movieList)
-        let initialList = [];
-        (movieList.length === 0) ? initialList = array : initialList = [...movieList]; //hack as movieList is empty initially always. Need to check and remove this.
-        let filteredList = (key === 'all') ? initialList : array.filter(item => ((item.genres).toString()).toLowerCase().includes(key));
-        console.log("==filteredList ", filteredList)
-        setVisibleMovies([...filteredList]);
+    function navigateToMovieDetails(movieId) {
+        if(!isMovieDetailsVisible){
+            props.getMovie(movieId)//re-rendering problem in design probably that's why if condition is put(Bad implementation)
+        }
+        setMovieDetailsVisible(true);
     }
-  
+
     useEffect(() => {
         props.getMovies()
     }, []);
 
-    return (
-        <>
-            {(isMovieDetailsVisible) ?
+    function loadMovies() {
+        return (<>
+            {(isMovieDetailsVisible && props.movieDetailProps.id !== undefined) ?
                 <div className='parent-header-movie-details-properties'>
                     <div className='parent-header-layer'>
                         <MovieDetails
-                            movieDetailSelection={movieDetailSelection}
-                            onMovieDetailsSearch={onMovieDetailsSearch}
+                            movieDetailSelection={props.movieDetailProps}
+                            onShowDefaultHeader={onShowDefaultHeader}
                         />
                     </div>
                 </div> :
@@ -136,6 +139,7 @@ function RouletteMain(props) {
                     <Header
                         isAddModalVisible={isAddModalVisible}
                         onAddAction={onAddAction}
+                        onMovieTitleSearch={onMovieTitleSearch}
                     />
                 </div>
             }
@@ -143,21 +147,23 @@ function RouletteMain(props) {
             <div className='parent-background-properties'>
                 <SortFilterListing onHandleSelectedSortOption={onHandleSelectedSortOption}
                     onFilterCategoryClicked={onFilterCategoryClicked}
-                    displayedMoviesCount={props.movieProps.length}
+                    displayedMoviesCount={(props.movieNotFound) ? null : props.movieProps.length}
                     selectedFilter={filterOption}
                 />
-                <ErrorBoundary
-                    isError={isError}>
-                    <React.Suspense
-                        fallback={<p className="parent-general-message">Loading titles...</p>}>
-                        <MoviesList
-                            movieList={props.movieProps}
-                            onEditAction={onEditAction}
-                            onDeleteAction={onDeleteAction}
-                            onShowMovieDetailsAction={onShowMovieDetailsAction}
-                        />
-                    </React.Suspense>
-                </ErrorBoundary>
+                {(props.movieNotFound) ?
+                    <NoMovieFound /> :
+                    <ErrorBoundary
+                        isError={isError}>
+                        <React.Suspense
+                            fallback={<p className="parent-general-message">Loading titles...</p>}>
+                            <MoviesList
+                                movieList={props.movieProps}
+                                onEditAction={onEditAction}
+                                onDeleteAction={onDeleteAction}
+                                onShowMovieDetailsAction={onShowMovieDetailsAction}
+                            />
+                        </React.Suspense>
+                    </ErrorBoundary>}
             </div>
             <div className='parent-footer-properties'>
                 <Footer />
@@ -179,17 +185,55 @@ function RouletteMain(props) {
                     onCloseAction={onCloseAction}
                     onDeleteMovieConfirmAction={onDeleteMovieConfirmAction}
                 /> : null}
-        </>
+        </>)
+    }
+
+    //Todo:
+    // Can put some html before and after route
+    // Need to create separate component like showing movies
+    // Render some condition if no movies
+    // Should use more than 1 route - Check Dhaneesh
+    // Header is the one that changes
+    //
+
+    /**
+     * Update redux store to display edit/add/delete modals or not
+     * Reduce complexity
+     * Try to separate 
+     * Do not connect with each other use redux store to connect them.
+     */
+
+    return (
+        <Router>
+            <Switch>
+                <Route exact path="/" children={() => {
+                    navigateToMovieDetails(-1)
+                    return loadMovies();
+                }} />
+                <Redirect exact from="/all" to="/film"  ></Redirect>
+                <Route exact path="/film"> {loadMovies()} </Route>
+                <Route exact path="/film/:movieId" children={({ match }) => {//child component
+                    navigateToMovieDetails(match.params.movieId)
+                    return loadMovies();
+                }} />
+                <Route exact path="/search/:searchString" children={({ match }) => {
+                    onMovieTitleSearch(match.params.searchString);
+                    return loadMovies();
+                }} />
+                <Route path="*"><PageNotFound /></Route>
+            </Switch>
+        </Router>
     )
 }
 
 const mapStateToProps = (state) => {
-    console.log("ooo", state)
-    const {movieReducer, movieDetailReducer} = state;
-    
+    console.log("State: ", state)
+    const { movieReducer, movieDetailReducer, movieNotFound } = state;
+
     return {
-        movieProps : movieReducer,
-        movieDetailProps : movieDetailReducer
+        movieProps: movieReducer,
+        movieDetailProps: movieDetailReducer,
+        movieNotFound: movieNotFound
     }
 }
 
@@ -199,9 +243,10 @@ const mapDispatchToProps = (dispatch) => {
         editMovie: editMovie,
         deleteMovie: deleteMovie,
         getMovies: getMovies,
+        searchMovies: searchMovies,
         getMovie: getMovie,
         sortMovies: sortMovies,
-        filterMovies: filterMovies
+        filterMovies: filterMovies,
     }, dispatch);
 }
 

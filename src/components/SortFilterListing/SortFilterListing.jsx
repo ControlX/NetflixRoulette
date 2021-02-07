@@ -12,8 +12,8 @@ export default function SortFilterListing(props) {
     return (<>
         <div className="parent-sort-div">
             <div className="sort-left-div">
-            {movieFilterArray.map( filterEl => 
-            (<button key={filterEl} className={`sort-left-button${filterEl === props.selectedFilter ? '-selected' : ''}`} onClick={processFilterClick} value={filterEl}>{filterEl}</button>))}
+                {movieFilterArray.map(filterEl =>
+                    (<button key={filterEl} className={`sort-left-button${filterEl === props.selectedFilter ? '-selected' : ''}`} onClick={processFilterClick} value={filterEl}>{filterEl}</button>))}
             </div>
             <div className="sort-right-div">
                 <label className="parent-sort-label"> SORT BY </label>
@@ -25,7 +25,9 @@ export default function SortFilterListing(props) {
                 </select>
             </div>
             <div className="sort-result-number">
-    <p><label><strong>{props.displayedMoviesCount}</strong></label>  {(props.displayedMoviesCount === 1) ? '  movie found' : '  movies found'}</p>
+                {(props.displayedMoviesCount !== null) ?
+                    <p><label><strong>{props.displayedMoviesCount}</strong></label>  {(props.displayedMoviesCount === 1) ? '  movie found' : '  movies found'}</p>
+                    : null}
             </div>
         </div>
     </>

@@ -1,10 +1,15 @@
 const path = require('path');
 const HWP = require('html-webpack-plugin');
 module.exports = {  
+    devtool: 'eval-source-map',
     mode: 'production',
     entry: path.join(__dirname, '/src/index.js'),
+    devServer: {
+      historyApiFallback: true,
+    },
     output: {
        filename: 'build.js',
+       publicPath:'/',
        path: path.join(__dirname, '/prod/dist')},
     module:{
        rules:[{

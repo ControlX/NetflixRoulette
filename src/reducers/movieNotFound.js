@@ -1,7 +1,7 @@
-const movieDetailReducer = (state = {}, action) => {
+const movieNotFound = (state = false, action) => {
 
     switch (action.type) {
-        case 'GET_MOVIE':
+        case 'ERROR':
             return action.payload
 
         default:
@@ -9,4 +9,4 @@ const movieDetailReducer = (state = {}, action) => {
     }
 
 }
-export default movieDetailReducer;
+export default movieNotFound;
